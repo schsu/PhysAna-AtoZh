@@ -42,15 +42,15 @@ void cutflow(char* inputFile){
 
     double electronMinPt = 25.0;
     double electronMaxEta = 2.4;
-    double muonMinPt = 5.0;
-    double muonMaxEta = 2.5;
+    double muonMinPt = 25.0;
+    double muonMaxEta = 2.4;
     double jetMinPt = 25.0;
 
     double jetMaxEta = 2;
     double dileptonMaxmass = 100;
     double dileptonMinmass = 80;
-    double dijetMaxmass = 165;
-    double dijetMinmass = 85;
+    double dijetMaxmass = 141;
+    double dijetMinmass = 111;
 
 
 
@@ -60,6 +60,8 @@ void cutflow(char* inputFile){
 
     //Load selected branches
     tr->ReadEntry(entry);
+
+    //all the events
     h1->Fill(10);
     bool positive = false;
     bool negative = false;
@@ -72,11 +74,11 @@ void cutflow(char* inputFile){
     std::vector<Jet> goodJets4;
     std::vector<Jet> goodJets10;
 
-    //have a pair of lepton pt > minPT , Eta < MaxEta
-    for(int i=0; i<branchElectron->GetEntries();++i){
+    //events have a pair of lepton pt > minPT , |Eta| < MaxEta
+    for(int i=0; i < branchElectron->GetEntries() ;++i){
             Electron *electron = (Electron*)branchElectron->At(i);
             if(electron->PT > electronMinPt && fabs(electron->Eta) < electronMaxEta ){
-                //goodElectrons.push_back(*electron);
+                goodElectrons.push_back(*electron);
                 if(electron->Charge == 1){
                     positive = true ;
                 }
@@ -101,28 +103,25 @@ void cutflow(char* inputFile){
     }
     int leptonNumber = 0;
     double dileptonMass = 0;
+    std::cout << goodElectrons.size() << "  "  <<  goodMuons.size() << std::endl;
     if (goodElectrons.size() == 2 && goodMuons.size() == 0) {
     	dileptonMass = (goodElectrons[0].P4() + goodElectrons[1].P4()).M();    
 	leptonNumber = 2 ;
-	//dilepton.push_back(goodElectrons[0]);
-        //dilepton.push_back(goodElectrons[1]);
+	
     }
     else if (goodElectrons.size() == 0 && goodMuons.size() == 2) {
-        //dilepton.push_back(goodMuons[0]);
-        //dilepton.push_back(goodMuons[1]);
         leptonNumber = 2 ;
         dileptonMass = (goodMuons[0].P4() + goodMuons[1].P4()).M();
     }
 
     if( positive == false || negative == false|| leptonNumber != 2){    continue;    }
-
-
     h1->Fill(20);
 
-    // minMass< mll < maxMass
-    //double dileptonMass = (dilepton[0]->P4() + dilepton[1]->P4()).M();
+
+    // minMass< m(ll) < maxMass
     if(dileptonMass < dileptonMinmass || dileptonMass > dileptonMaxmass ){  continue;  }
     h1->Fill(30);
+
 
     // at least two jet4 (jet pT>25GeV, |eta|<2)
     double numerofgoodJet4 = 0;
@@ -132,10 +131,13 @@ void cutflow(char* inputFile){
                 numerofgoodJet4++;
             }
     }
+
+    if(numerofgoodJet4<2){continue; }
     h1->Fill(40);
 
-    // at least two b-jet4 (jet pT>25GeV, |eta|<2)
 
+
+    // at least two b-jet4 (jet pT>25GeV, |eta|<2)
     float electronJetCloseness = 0.1;
     for (int i = 0; i < branchJet4->GetEntries(); ++i) {
       Jet* jet =(Jet *) branchJet4->At(i);
@@ -155,6 +157,8 @@ void cutflow(char* inputFile){
       }
     }
     
+
+    //select goodJet6 (jet pT>25GeV, |eta|<2)
     for (int i = 0; i < branchJet6->GetEntries(); ++i) {
       Jet* jet = (Jet *) branchJet6->At(i);
       if (jet->PT > jetMinPt && fabs(jet->Eta) < jetMaxEta) {
@@ -170,15 +174,13 @@ void cutflow(char* inputFile){
       }
     }
 
-    if(goodJets4.size() < 2 ||  goodJets6.size() < 2){  continue;    }
+    if(goodJets4.size() < 2){  continue;    }
     h1->Fill(50);
 
-    // 85<m(jj)<165 GeV
+    // 111GeV < m(jj) <141 GeV
     double dijet4mass = (goodJets4[0].P4()+goodJets4[1].P4()).M();
     double dijet6mass = (goodJets6[0].P4()+goodJets6[1].P4()).M();
-    if((dijet4mass > dijetMaxmass || dijet4mass < dijetMinmass) && (dijet6mass > dijetMaxmass || dijet6mass < dijetMinmass ) ){
-        continue;
-    }
+    if((dijet4mass > dijetMaxmass || dijet4mass < dijetMinmass)){   continue;    }
     h1->Fill(60);
 
   
