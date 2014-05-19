@@ -1,0 +1,103 @@
+# 2HDM4TC Parameters
+# Spectrum and decay, produced by 2HDM4TCCalc
+# ********************************************
+Block SMINPUTS      # Standard Model inputs
+     1       1.2793400000000E+02   # alpha em(MZ)(-1) SM MSbar
+     2       1.1663700000000E-05   # G Fermi
+     3       1.1720000000000E-01   # alpha s(MZ) SM MSbar
+     4       9.1187600000000E+01   # MZ(Pole)
+Block MGCKM   # CKM Matrix
+    1     1       9.7450000000000E-01   # Vud
+Block MGYUKAWA   # Yukawa masses
+#    PDG          YMASS
+     3       0.0000000000000E+00   # Ms
+     4       6.0000000000000E-01   # Mc
+     5       3.0000000000000E+00   # Mb
+     6       1.7500000000000E+02   # Mt
+     13      0.0000000000000E+00   # Mmu
+     15      1.7770000000000E+00   # Mta
+#===========================================================
+# QUANTUM NUMBERS OF NEW STATE(S) (NON SM PDG CODE) IF ANY
+# (see below for masses and decay tables)
+# These blocks are automatically created by the MadGraph
+# qnumbers.pl script from the particles.dat model file
+#===========================================================
+# END of QNUMBERS blocks
+#===========================================================
+Block MASS # Mass spectrum (kinematic masses)
+# PDG Code                mass    particle
+# SM PARTICLES
+         3    1.0500000000000E-01    # Ms
+         4    6.5000000000000E-01    # Mc
+         5    4.2000000000000E+00    # Mb
+         6    1.7430000000000E+02    # Mt
+        13    1.0600000000000E-01    # Mmu
+        15    1.6000000000000E+00    # Mtau
+        23    9.1187600000000E+01    # Mz
+        24    7.9829013114277E+01    # Mw
+# 2HDM ADD SCALARS
+        25    1.2500000000000E+02    # h mass
+        35    1.0000000000000E+03    # H mass
+        36    $amass$0000000000000E+02    # A mass
+        37    3.0000000000000E+02    # Charged Higgs
+#     PDG               Width
+DECAY        25   4.33813095e-04   # h1 decays
+#          BR         NDA      ID1       ID2
+     1.19088294e-05    2         -15        15   # BR(h1 -> ta+ ta- )
+     0.00000000e+00    2         -13        13   # BR(h1 -> mu+ mu- )
+     1.28389743e-01    2          -6         6   # BR(h1 -> t~ t )
+     4.06180939e-06    2          -4         4   # BR(h1 -> c~ c )
+     1.02160505e-04    2          -5         5   # BR(h1 -> b~ b )
+     0.00000000e+00    2          -3         3   # BR(h1 -> s~ s )
+     4.03499710e-01    2         -24        24   # BR(h1 -> w- w+ )
+     1.94343692e-01    2          23        23   # BR(h1 -> z z )
+     8.56276640e-02    2          23        36   # BR(h1 -> z h3 )
+     9.40592451e-02    2         -24       -37   # BR(h1 -> w- h+ )
+     9.39618147e-02    2          24        37   # BR(h1 -> w+ h- )
+     6.03464097e-14    2          21        21   # BR(h1 -> g g )
+     1.50615650e-15    3          37        -5         6   # BR(h1 -> h- b~ t )
+     1.49547867e-15    3         -37        -6         5   # BR(h1 -> h+ t~ b )
+#
+DECAY        36   1.0   # h3 decays
+#          BR         NDA      ID1       ID2
+     0.00000000e+00    2         -15        15   # BR(h3 -> ta+ ta- )
+     0.00000000e+00    2         -13        13   # BR(h3 -> mu+ mu- )
+     0.00000000e+00    2          -4         4   # BR(h3 -> c~ c )
+     0.00000000e+00    2          -5         5   # BR(h3 -> b~ b )
+     0.00000000e+00    2          -3         3   # BR(h3 -> s~ s )
+     0.00000000e+00    2         -24        24   # BR(h3 -> w- w+ )
+     0.00000000e+00    2          23        23   # BR(h3 -> z z )
+     0.00000000e+00    2          21        21   # BR(h3 -> g g )
+     1.03840131e-07    3          -6         5        24   # BR(h3 -> t~ b w+ )
+     1.04037010e-07    3           6        -5       -24   # BR(h3 -> t b~ w- )
+     8.64698337e-04    3          23       -15        15   # BR(h3 -> z ta+ ta- )
+     2.98471986e-04    3          23        -4         4   # BR(h3 -> z c~ c )
+     7.42619993e-03    3          23        -5         5   # BR(h3 -> z b~ b )
+     8.05364549e-01    3          23       -24        24   # BR(h3 -> z w- w+ )
+     1.86045873e-01    3          23        23        23   # BR(h3 -> z z z )
+     9.16641586e-11    3          23        21        21   # BR(h3 -> z g g )
+#
+DECAY        37   5.13457375e-06   # h- decays
+#          BR         NDA      ID1       ID2
+     0.00000000e+00    2          -2         3   # BR(h- -> u~ s )
+     0.00000000e+00    2          -4         1   # BR(h- -> c~ d )
+     0.00000000e+00    2          -4         3   # BR(h- -> c~ s )
+     2.99119089e-04    2          -6         5   # BR(h- -> t~ b )
+     0.00000000e+00    2         -14        13   # BR(h- -> vm~ mu- )
+     0.00000000e+00    2         -16        15   # BR(h- -> vt~ ta- )
+     4.44667775e-10    3          23        -6         5   # BR(h- -> z t~ b )
+     5.38807377e-04    3         -24       -15        15   # BR(h- -> w- ta+ ta- )
+     1.81798940e-04    3         -24        -4         4   # BR(h- -> w- c~ c )
+     4.56809997e-03    3         -24        -5         5   # BR(h- -> w- b~ b )
+     7.36910447e-01    3         -24       -24        24   # BR(h- -> w- w- w+ )
+     2.57501727e-01    3         -24        23        23   # BR(h- -> w- z z )
+     4.99455958e-11    3         -24        21        21   # BR(h- -> w- g g )
+#
+DECAY   6     1.5147091872570E+00      # top width
+DECAY  23     2.4128678956506E+00      # z width 
+DECAY  24     2.0030949422256E+00      # w width (SM decays only)
+DECAY  35     8.9569378475030E+02      # H2 width
+BLOCK MGUSER
+         1     1.0000000000000e+00   # TanBeta ,v2/v1
+         2     0.0000000000000e+00   # SinAlpha ,Sine of the h1/h2 mixing angle
+         3     7.0710000000000e-01   # SinGamma ,Sine of the h1/h2 top angle

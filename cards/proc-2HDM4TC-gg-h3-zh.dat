@@ -1,0 +1,14 @@
+
+import model_v4 2HDM4TC -modelname
+define me e+ e-
+define lp e+ mu+ 
+define lm e- mu- 
+define ll lp lm
+define pp c d u s c~ d~ u~ s~
+define mmu mu+ mu-
+define mW W+ W-
+define jj c d u s c~ d~ u~ s~
+define mta ta+ ta-
+define tt ta+ ta-
+generate g g > h3, (h3 > z h1, z > lp lm, h1 > b b~)
+output madevent proc-2HDM4TC-gg-h3-zh -f

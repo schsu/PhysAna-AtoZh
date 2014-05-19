@@ -1,0 +1,12 @@
+define me e+ e-
+define lp e+ mu+ 
+define lm e- mu- 
+define ll lp lm
+define pp c d u s c~ d~ u~ s~
+define mmu mu+ mu-
+define mW W+ W-
+define jj c d u s c~ d~ u~ s~
+define mta ta+ ta-
+define tt ta+ ta-
+generate p p > Z b b~, Z > lp lm
+output madevent proc-std-pp-zbb -f

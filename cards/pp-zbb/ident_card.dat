@@ -1,0 +1,33 @@
+ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+c      written by the UFO converter
+ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+
+sminputs 1 aEWM1
+
+sminputs 2 Gf
+
+sminputs 3 aS
+
+yukawa 5 ymb
+
+yukawa 6 ymt
+
+yukawa 15 ymtau
+
+mass 23 MZ
+
+mass 6 MT
+
+mass 5 MB
+
+mass 25 MH
+
+mass 15 MTA
+
+decay 23 WZ
+
+decay 24 WW
+
+decay 6 WT
+
+decay 25 WH
