@@ -269,5 +269,26 @@ void cutflow(char* inputFile){
 
   }
 
-  h2->Draw();
+  std::cout << "Flow r " << std::endl;
+  int nbins = h1->GetNbinsX();
+  for (int i = 1; i <= nbins; ++i) {
+    double items = h1->GetBinContent(i);
+    if (items > 0.0) {
+      std::cout << "n=" << i << "  " <<  items << " ";
+    }
+  }
+
+  std::cout << std::endl;
+
+  std::cout << "Flow b " << std::endl;
+  int nbinsb = h2->GetNbinsX();
+  for (int i = 1; i <= nbinsb; ++i) {
+    double items = h2->GetBinContent(i);
+    if (items > 0.0) {
+      std::cout << "n=" << i <<"  " << items << " ";
+    }
+  }
+
+  std::cout << std::endl;
+
 }
