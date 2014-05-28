@@ -2,13 +2,15 @@ SRC := $(wildcard *.cpp)
 OBJ := $(SRC:.cpp=.o)
 CFLAGS := -O3
 LDFLAGS= -L$(DELPHESPATH) -lDelphes
-INCLUDES = -I$(ROOTSYS)/include -I$(DELPHESPATH)
+INCLUDES =  -I$(DELPHESPATH)
+ROOTCFLAGS      := $(shell root-config --cflags)
+ROOTGLIBS       := $(shell root-config --glibs)
 
 %.o:%.cpp
-	g++ -c -o $@ $< $(CFLAGS) $(INCLUDES)
+	g++ -c -o $@ $< $(CFLAGS) $(INCLUDES) $(ROOTCFLAGS)
 
 truthstudy: $(OBJ)
-	g++ $(OBJ) $(CFLAGS) $(LDFLAGS) -o truthstudy
+	g++ $(OBJ) $(CFLAGS) $(LDFLAGS) $(ROOTGLIBS) -o truthstudy
 
 clean:
-	rm -rf *o
+	rm -rf *.o truthstudy
