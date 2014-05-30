@@ -56,7 +56,7 @@ int main() {
   cout << "   #  PID  Status  M1  M2  D1  D2  Charge    Mass        E        Px        Py        Pz        PT       Eta       Phi     Rapidity " << endl;
   cout << "------------------------------------------------------------------------------------------------------------------------------------" << endl;
 
-  for (Int_t i; i < numberofParticle; i++) {
+  for (Int_t i=0; i < numberofParticle; i++) {
     GenParticle* particle = (GenParticle*) branchParticle->At(i);
     cout.width(4);
     cout.fill(' ');
