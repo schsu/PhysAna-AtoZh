@@ -59,14 +59,16 @@ int main (int argc, char * argv[])
 	ExRootTreeReader * tr = new ExRootTreeReader(tc);
 	Long64_t numberofEntries = tr->GetEntries();
 
-	// get pointer to particle, electron, and muon branches
+	// get pointer to particle, electron, muon, and jet branches
 	TClonesArray * branchParticle = tr->UseBranch("Particle");
 	TClonesArray * branchElectron = tr->UseBranch("Electron");
 	TClonesArray * branchMuon = tr->UseBranch("Muon");
+	TClonesArray * branchJet = tr->UseBranch("Jet");
 
-	// counter for electrons and muons in particle, electron, and muon branches
+	// counter for electrons, muons, and jets in particle, electron, muon, and jet branches
 	int64_t electrons = 0;
 	int64_t muons = 0;
+	int64_t jets = 0;
 	int64_t truth_electrons = 0;
 	int64_t truth_muons = 0;
 
@@ -80,6 +82,16 @@ int main (int argc, char * argv[])
 	TH1F * h_muon_e = new TH1F("muon E", "muon E; E (GeV 100 bins); count", 100, 0, 300);
 	TH1F * h_muon_eta = new TH1F("muon eta", "muon eta; eta (100 bins); count", 100, -3.4, 3.4);
 	TH1F * h_muon_phi = new TH1F("muon phi", "muon phi; phi (100 bins); count", 100, -3.4, 3.4);
+
+	TH1F * h_jet_pt = new TH1F("jet pt", "jet pt; pt (GeV 100 bins); count", 100, 0, 300);
+	TH1F * h_jet_e = new TH1F("jet E", "jet E; E (GeV 100 bins); count", 100, 0, 300);
+	TH1F * h_jet_eta = new TH1F("jet eta", "jet eta; eta (100 bins); count", 100, -3.4, 3.4);
+	TH1F * h_jet_phi = new TH1F("jet phi", "jet phi; phi (100 bins); count", 100, -3.4, 3.4);
+
+	TH1F * h_electron_deltar = new TH1F("electron delta r", "electron delta r; delta r (100 bins); count", 100, 0, 5);
+	TH1F * h_muon_deltar = new TH1F("muon delta r", "muon delta r; delta r (100 bins); count", 100, 0, 5);
+	TH2F * h_electron_E1xE2_vs_deltar = new TH2F("electron E1 * E2 vs delta r", "electron E1 * E2 vs delta r; electron E1 * E2 (GeV^2); delta r", 100, 0, 90000, 100, 0, 5);
+	TH2F * h_muon_E1xE2_vs_deltar = new TH2F("muon E1 * E2 vs delta r", "muon E1 * E2 vs delta r; muon E1 * E2 (GeV^2); delta r", 100, 0, 90000, 100, 0, 5);
 
 	TH1F * h_truth_electron_pt = new TH1F("truth electron pt", "truth electron pt; pt (GeV, 100 bins); count", 100, 0, 300);
 	TH1F * h_truth_muon_pt = new TH1F("truth muon pt", "truth muon pt; pt (GeV 100 bins); count", 100, 0, 300);
@@ -96,6 +108,7 @@ int main (int argc, char * argv[])
 		// add the number of electrons and muons in the event
 		electrons += branchElectron->GetEntries();
 		muons += branchMuon->GetEntries();
+		jets += branchJet->GetEntries();
 
 		// add the number of truth electrons and muons in the event
 		for (int i = 0; i < branchParticle->GetEntries(); i++)
@@ -136,9 +149,40 @@ int main (int argc, char * argv[])
 			h_muon_eta->Fill(muon->Eta);
 			h_muon_phi->Fill(muon->Phi);
 		}
+		for (int i = 0; i < branchJet->GetEntries(); i++)
+		{
+			Jet * jet = (Jet*) branchJet->At(i);
+			h_jet_pt->Fill(jet->PT);
+			h_jet_e->Fill(jet->P4().E());
+			h_jet_eta->Fill(jet->Eta);
+			h_jet_phi->Fill(jet->Phi);
+		}
+
+		if (branchElectron->GetEntries() == 2)
+		{
+			Electron * electron0 = (Electron*) branchElectron->At(0);
+			Electron * electron1 = (Electron*) branchElectron->At(1);
+
+			if (electron0->Charge == -1 * electron1->Charge)
+			{
+				h_electron_deltar->Fill(electron0->P4().DeltaR(electron1->P4()));
+				h_electron_E1xE2_vs_deltar->Fill(electron0->P4().E() * electron1->P4().E(), electron0->P4().DeltaR(electron1->P4()));
+			}
+		}
+		if (branchMuon->GetEntries() == 2)
+		{
+			Muon * muon0 = (Muon*) branchMuon->At(0);
+			Muon * muon1 = (Muon*) branchMuon->At(1);
+
+			if (muon0->Charge == -1 * muon1->Charge)
+			{
+				h_muon_deltar->Fill(muon0->P4().DeltaR(muon1->P4()));
+				h_muon_E1xE2_vs_deltar->Fill(muon0->P4().E() * muon1->P4().E(), muon0->P4().DeltaR(muon1->P4()));
+			}
+		}
 	}
 
-	// output the number of electrons and muons
+	// output the number of electrons, muons, and jets
 	cout.width(20);
 	cout << "particle";
 	cout.width(20);
@@ -166,13 +210,18 @@ int main (int argc, char * argv[])
 	cout.width(20);
 	cout << (float) muons / (float) truth_muons << endl;
 
+	cout.width(20);
+	cout << "jets";
+	cout.width(20);
+	cout << jets << endl;
+
 	// make the directory for the plots
 	mkdir("inclusive_plots", 0777);
 
 	// output the histograms
 	TCanvas * c1 = new TCanvas("c1", "c1", 640, 480);
 
-	// electron and muon branch kinematics
+	// electron, muon, and jet branch kinematics
 	h_electron_pt->Draw();
 	c1->SaveAs("inclusive_plots/electron_pt.eps");
 	h_electron_e->Draw();
@@ -190,6 +239,26 @@ int main (int argc, char * argv[])
 	c1->SaveAs("inclusive_plots/muon_eta.eps");
 	h_muon_phi->Draw();
 	c1->SaveAs("inclusive_plots/muon_phi.eps");
+
+	h_jet_pt->Draw();
+	c1->SaveAs("inclusive_plots/jet_pt.eps");
+	h_jet_e->Draw();
+	c1->SaveAs("inclusive_plots/jet_E.eps");
+	h_jet_eta->Draw();
+	c1->SaveAs("inclusive_plots/jet_eta.eps");
+	h_jet_phi->Draw();
+	c1->SaveAs("inclusive_plots/jet_phi.eps");
+
+	// deltar plots
+	h_electron_deltar->Draw();
+	c1->SaveAs("inclusive_plots/electron_deltar.eps");
+	h_electron_E1xE2_vs_deltar->Draw();
+	c1->SaveAs("inclusive_plots/electron_E1xE2_vs_deltar.eps");
+
+	h_muon_deltar->Draw();
+	c1->SaveAs("inclusive_plots/muon_deltar.eps");
+	h_muon_E1xE2_vs_deltar->Draw();
+	c1->SaveAs("inclusive_plots/muon_E1xE2_vs_deltar.eps");
 
 	// particle branch pt plots
 	h_truth_electron_pt->Draw();
