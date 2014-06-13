@@ -72,26 +72,20 @@ int main (int argc, char * argv[])
 
 	// create the histograms
 	TH1F * h_electron_pt = new TH1F("electron pt", "electron pt; pt (GeV, 100 bins); count", 100, 0, 300);
-	h_electron_pt->Sumw2();
-	TH1F * h_truth_electron_pt = new TH1F("truth electron pt", "truth electron pt; pt (GeV, 100 bins); count", 100, 0, 300);
-	h_truth_electron_pt->Sumw2();
+	TH1F * h_electron_e = new TH1F("electron E", "electron E; E (GeV, 100 bins); count", 100, 0, 300);
 	TH1F * h_electron_eta = new TH1F("electron eta", "electron eta; eta (100 bins); count", 100, -3.4, 3.4);
-	h_electron_eta->Sumw2();
 	TH1F * h_electron_phi = new TH1F("electron phi", "electron phi; phi (100 bins); count", 100, -3.4, 3.4);
-	h_electron_phi->Sumw2();
-	TH1F * h_electron_multiplicity = new TH1F("electron multiplicity", "electron multiplicity; electrons per event; count", 4, 0, 4);
-	h_electron_multiplicity->Sumw2();
 
 	TH1F * h_muon_pt = new TH1F("muon pt", "muon pt; pt (GeV 100 bins); count", 100, 0, 300);
-	h_muon_pt->Sumw2();
-	TH1F * h_truth_muon_pt = new TH1F("truth muon pt", "truth muon pt; pt (GeV 100 bins); count", 100, 0, 300);
-	h_truth_muon_pt->Sumw2();
+	TH1F * h_muon_e = new TH1F("muon E", "muon E; E (GeV 100 bins); count", 100, 0, 300);
 	TH1F * h_muon_eta = new TH1F("muon eta", "muon eta; eta (100 bins); count", 100, -3.4, 3.4);
-	h_muon_eta->Sumw2();
 	TH1F * h_muon_phi = new TH1F("muon phi", "muon phi; phi (100 bins); count", 100, -3.4, 3.4);
-	h_muon_phi->Sumw2();
+
+	TH1F * h_truth_electron_pt = new TH1F("truth electron pt", "truth electron pt; pt (GeV, 100 bins); count", 100, 0, 300);
+	TH1F * h_truth_muon_pt = new TH1F("truth muon pt", "truth muon pt; pt (GeV 100 bins); count", 100, 0, 300);
+
+	TH1F * h_electron_multiplicity = new TH1F("electron multiplicity", "electron multiplicity; electrons per event; count", 4, 0, 4);
 	TH1F * h_muon_multiplicity = new TH1F("muon multiplicity", "muon multiplicity; muons per event; count", 4, 0, 4);
-	h_muon_multiplicity->Sumw2();
 
 	// loop over each event
 	for(Int_t entry = 0; entry < numberofEntries; entry++)
@@ -130,6 +124,7 @@ int main (int argc, char * argv[])
 		{
 			Electron * electron = (Electron*) branchElectron->At(i);
 			h_electron_pt->Fill(electron->PT);
+			h_electron_e->Fill(electron->P4().E());
 			h_electron_eta->Fill(electron->Eta);
 			h_electron_phi->Fill(electron->Phi);
 		}
@@ -137,6 +132,7 @@ int main (int argc, char * argv[])
 		{
 			Muon * muon = (Muon*) branchMuon->At(i);
 			h_muon_pt->Fill(muon->PT);
+			h_muon_e->Fill(muon->P4().E());
 			h_muon_eta->Fill(muon->Eta);
 			h_muon_phi->Fill(muon->Phi);
 		}
@@ -176,10 +172,11 @@ int main (int argc, char * argv[])
 	// output the histograms
 	TCanvas * c1 = new TCanvas("c1", "c1", 640, 480);
 
+	// electron and muon branch kinematics
 	h_electron_pt->Draw();
 	c1->SaveAs("inclusive_plots/electron_pt.eps");
-	h_truth_electron_pt->Draw();
-	c1->SaveAs("inclusive_plots/truth_electron_pt.eps");
+	h_electron_e->Draw();
+	c1->SaveAs("inclusive_plots/electron_E.eps");
 	h_electron_eta->Draw();
 	c1->SaveAs("inclusive_plots/electron_eta.eps");
 	h_electron_phi->Draw();
@@ -187,25 +184,37 @@ int main (int argc, char * argv[])
 
 	h_muon_pt->Draw();
 	c1->SaveAs("inclusive_plots/muon_pt.eps");
-	h_truth_muon_pt->Draw();
-	c1->SaveAs("inclusive_plots/truth_muon_pt.eps");
+	h_muon_e->Draw();
+	c1->SaveAs("inclusive_plots/muon_E.eps");
 	h_muon_eta->Draw();
 	c1->SaveAs("inclusive_plots/muon_eta.eps");
 	h_muon_phi->Draw();
 	c1->SaveAs("inclusive_plots/muon_phi.eps");
 
+	// particle branch pt plots
+	h_truth_electron_pt->Draw();
+	c1->SaveAs("inclusive_plots/truth_electron_pt.eps");
+	h_truth_muon_pt->Draw();
+	c1->SaveAs("inclusive_plots/truth_muon_pt.eps");
+
+	// pt divide plots
+	h_electron_pt->Sumw2();
+	h_truth_electron_pt->Sumw2();
 	TH1F * h_electron_pt_divide = (TH1F*) h_electron_pt->Clone("electron pt divide");
 	h_electron_pt_divide->SetTitle("electron pt divide; pt (GeV, 100 bins); count");
 	h_electron_pt_divide->Divide(h_truth_electron_pt);
 	h_electron_pt_divide->Draw();
 	c1->SaveAs("inclusive_plots/electron_pt_divide.eps");
 
+	h_muon_pt->Sumw2();
+	h_truth_muon_pt->Sumw2();
 	TH1F * h_muon_pt_divide = (TH1F*) h_muon_pt->Clone("muon pt divide");
 	h_muon_pt_divide->SetTitle("muon pt divide; pt (GeV, 100 bins); count");
 	h_muon_pt_divide->Divide(h_truth_muon_pt);
 	h_muon_pt_divide->Draw();
 	c1->SaveAs("inclusive_plots/muon_pt_divide.eps");
 
+	// multiplicity plots
 	h_electron_multiplicity->Draw();
 	c1->SaveAs("inclusive_plots/electron_multiplicity.eps");
 	h_muon_multiplicity->Draw();
