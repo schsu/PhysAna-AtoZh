@@ -8,6 +8,7 @@
 
 #include <errno.h>
 #include <unistd.h>
+#include <sys/stat.h>
 
 #include "TSystem.h"
 #include "TChain.h"
@@ -169,43 +170,46 @@ int main (int argc, char * argv[])
 	cout.width(20);
 	cout << (float) muons / (float) truth_muons << endl;
 
+	// make the directory for the plots
+	mkdir("inclusive_plots", 0777);
+
 	// output the histograms
 	TCanvas * c1 = new TCanvas("c1", "c1", 640, 480);
 
 	h_electron_pt->Draw();
-	c1->SaveAs("electron_pt.eps");
+	c1->SaveAs("inclusive_plots/electron_pt.eps");
 	h_truth_electron_pt->Draw();
-	c1->SaveAs("truth_electron_pt.eps");
+	c1->SaveAs("inclusive_plots/truth_electron_pt.eps");
 	h_electron_eta->Draw();
-	c1->SaveAs("electron_eta.eps");
+	c1->SaveAs("inclusive_plots/electron_eta.eps");
 	h_electron_phi->Draw();
-	c1->SaveAs("electron_phi.eps");
+	c1->SaveAs("inclusive_plots/electron_phi.eps");
 
 	h_muon_pt->Draw();
-	c1->SaveAs("muon_pt.eps");
+	c1->SaveAs("inclusive_plots/muon_pt.eps");
 	h_truth_muon_pt->Draw();
-	c1->SaveAs("truth_muon_pt.eps");
+	c1->SaveAs("inclusive_plots/truth_muon_pt.eps");
 	h_muon_eta->Draw();
-	c1->SaveAs("muon_eta.eps");
+	c1->SaveAs("inclusive_plots/muon_eta.eps");
 	h_muon_phi->Draw();
-	c1->SaveAs("muon_phi.eps");
+	c1->SaveAs("inclusive_plots/muon_phi.eps");
 
 	TH1F * h_electron_pt_divide = (TH1F*) h_electron_pt->Clone("electron pt divide");
 	h_electron_pt_divide->SetTitle("electron pt divide; pt (GeV, 100 bins); count");
 	h_electron_pt_divide->Divide(h_truth_electron_pt);
 	h_electron_pt_divide->Draw();
-	c1->SaveAs("electron_pt_divide.eps");
+	c1->SaveAs("inclusive_plots/electron_pt_divide.eps");
 
 	TH1F * h_muon_pt_divide = (TH1F*) h_muon_pt->Clone("muon pt divide");
 	h_muon_pt_divide->SetTitle("muon pt divide; pt (GeV, 100 bins); count");
 	h_muon_pt_divide->Divide(h_truth_muon_pt);
 	h_muon_pt_divide->Draw();
-	c1->SaveAs("muon_pt_divide.eps");
+	c1->SaveAs("inclusive_plots/muon_pt_divide.eps");
 
 	h_electron_multiplicity->Draw();
-	c1->SaveAs("electron_multiplicity.eps");
+	c1->SaveAs("inclusive_plots/electron_multiplicity.eps");
 	h_muon_multiplicity->Draw();
-	c1->SaveAs("muon_multiplicity.eps");
+	c1->SaveAs("inclusive_plots/muon_multiplicity.eps");
 
 	return 0;
 }
