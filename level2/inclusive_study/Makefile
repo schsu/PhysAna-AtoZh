@@ -9,8 +9,8 @@ ROOTGLIBS := $(shell root-config --glibs)
 %.o:%.cpp
 	g++ -c -o $@ $< $(CFLAGS) $(INCLUDES) $(ROOTCFLAGS)
 
-inclusive: $(OBJ)
-	g++ $(OBJ) $(CFLAGS) $(LDFLAGS) $(ROOTGLIBS) -o inclusive
+inclusive_study: $(OBJ)
+	g++ $(OBJ) $(CFLAGS) $(LDFLAGS) $(ROOTGLIBS) -o inclusive_study
 
 clean:
-	rm -rf *.o inclusive
+	rm -rf *.o inclusive_study

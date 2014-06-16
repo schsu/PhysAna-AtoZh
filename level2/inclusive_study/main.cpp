@@ -88,11 +88,6 @@ int main (int argc, char * argv[])
 	TH1F * h_jet_eta = new TH1F("jet eta", "jet eta; eta (100 bins); count", 100, -3.4, 3.4);
 	TH1F * h_jet_phi = new TH1F("jet phi", "jet phi; phi (100 bins); count", 100, -3.4, 3.4);
 
-	TH1F * h_electron_deltar = new TH1F("electron delta r", "electron delta r; delta r (100 bins); count", 100, 0, 5);
-	TH1F * h_muon_deltar = new TH1F("muon delta r", "muon delta r; delta r (100 bins); count", 100, 0, 5);
-	TH2F * h_electron_E1xE2_vs_deltar = new TH2F("electron E1 * E2 vs delta r", "electron E1 * E2 vs delta r; electron E1 * E2 (GeV^2); delta r", 100, 0, 90000, 100, 0, 5);
-	TH2F * h_muon_E1xE2_vs_deltar = new TH2F("muon E1 * E2 vs delta r", "muon E1 * E2 vs delta r; muon E1 * E2 (GeV^2); delta r", 100, 0, 90000, 100, 0, 5);
-
 	TH1F * h_truth_electron_pt = new TH1F("truth electron pt", "truth electron pt; pt (GeV, 100 bins); count", 100, 0, 300);
 	TH1F * h_truth_muon_pt = new TH1F("truth muon pt", "truth muon pt; pt (GeV 100 bins); count", 100, 0, 300);
 
@@ -105,7 +100,7 @@ int main (int argc, char * argv[])
 		// load selected branches
 		tr->ReadEntry(entry);
 
-		// add the number of electrons and muons in the event
+		// add the number of electrons, muons, and jets in the event
 		electrons += branchElectron->GetEntries();
 		muons += branchMuon->GetEntries();
 		jets += branchJet->GetEntries();
@@ -156,29 +151,6 @@ int main (int argc, char * argv[])
 			h_jet_e->Fill(jet->P4().E());
 			h_jet_eta->Fill(jet->Eta);
 			h_jet_phi->Fill(jet->Phi);
-		}
-
-		if (branchElectron->GetEntries() == 2)
-		{
-			Electron * electron0 = (Electron*) branchElectron->At(0);
-			Electron * electron1 = (Electron*) branchElectron->At(1);
-
-			if (electron0->Charge == -1 * electron1->Charge)
-			{
-				h_electron_deltar->Fill(electron0->P4().DeltaR(electron1->P4()));
-				h_electron_E1xE2_vs_deltar->Fill(electron0->P4().E() * electron1->P4().E(), electron0->P4().DeltaR(electron1->P4()));
-			}
-		}
-		if (branchMuon->GetEntries() == 2)
-		{
-			Muon * muon0 = (Muon*) branchMuon->At(0);
-			Muon * muon1 = (Muon*) branchMuon->At(1);
-
-			if (muon0->Charge == -1 * muon1->Charge)
-			{
-				h_muon_deltar->Fill(muon0->P4().DeltaR(muon1->P4()));
-				h_muon_E1xE2_vs_deltar->Fill(muon0->P4().E() * muon1->P4().E(), muon0->P4().DeltaR(muon1->P4()));
-			}
 		}
 	}
 
@@ -248,17 +220,6 @@ int main (int argc, char * argv[])
 	c1->SaveAs("inclusive_plots/jet_eta.eps");
 	h_jet_phi->Draw();
 	c1->SaveAs("inclusive_plots/jet_phi.eps");
-
-	// deltar plots
-	h_electron_deltar->Draw();
-	c1->SaveAs("inclusive_plots/electron_deltar.eps");
-	h_electron_E1xE2_vs_deltar->Draw();
-	c1->SaveAs("inclusive_plots/electron_E1xE2_vs_deltar.eps");
-
-	h_muon_deltar->Draw();
-	c1->SaveAs("inclusive_plots/muon_deltar.eps");
-	h_muon_E1xE2_vs_deltar->Draw();
-	c1->SaveAs("inclusive_plots/muon_E1xE2_vs_deltar.eps");
 
 	// particle branch pt plots
 	h_truth_electron_pt->Draw();
