@@ -1,3 +1,4 @@
+// C++ headers
 #include <iostream>
 #include <map>
 #include <string>
@@ -6,10 +7,12 @@
 #include <memory>
 #include <numeric>
 
+// C headers
 #include <errno.h>
 #include <unistd.h>
 #include <sys/stat.h>
 
+// ROOT headers
 #include "TSystem.h"
 #include "TChain.h"
 #include "TFile.h"
@@ -19,6 +22,7 @@
 #include "TCanvas.h"
 #include "TImage.h"
 
+// Delphes headers (requires that Delphes' library path be added to your LD_LIBRARY_PATH)
 #include "classes/DelphesClasses.h"
 #include "external/ExRootAnalysis/ExRootTreeReader.h"
 
