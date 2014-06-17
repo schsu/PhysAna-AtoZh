@@ -60,8 +60,8 @@ int main (int argc, char * argv[])
 	Long64_t numberofEntries = tr->GetEntries();
 
 	// create histograms to contain cut flow information
-	TH1F * h1 = new TH1F("cut flow, r", "cut flow, r", 101, 0, 100);
-	TH1F * h2 = new TH1F("cut flow, b", "cut flow, b", 111, 0, 110);
+	TH1F * h1 = new TH1F("cut flow, r", "cut flow, r", 11, 0, 10);
+	TH1F * h2 = new TH1F("cut flow, b", "cut flow, b", 12, 0, 11);
 
 	// get pointer to branches
 	TClonesArray * branchElectron = tr->UseBranch("Electron");
@@ -93,8 +93,8 @@ int main (int argc, char * argv[])
 		tr->ReadEntry(entry);
 
 		// add all the events to the 1st bin of both channels
-		h1->Fill(10);
-		h2->Fill(10);
+		h1->Fill(1);
+		h2->Fill(1);
 
 		bool positive = false;
 		bool negative = false;
@@ -160,20 +160,20 @@ int main (int argc, char * argv[])
 			continue;
 		}
 
-		// if we don't have exactly 2 leptons, 1 positive and 1 negative, fill the 2nd bin of both channels
-		h1->Fill(20);
-		h2->Fill(20);
+		// if we have exactly 2 leptons, 1 positive and 1 negative, fill the 2nd bin of both channels
+		h1->Fill(2);
+		h2->Fill(2);
 
 		// if the dilepton mass is in the range minMass < m(ll) < maxMass
 		if (dileptonMass < dileptonMinmass || dileptonMass > dileptonMaxmass)
 		{
 			continue;
 		}
-		// fill te 3rd bin of both channels
-		h1->Fill(30);
-		h2->Fill(30);
+		// fill the 3rd bin of both channels
+		h1->Fill(3);
+		h2->Fill(3);
 
-		// another cut parameters
+		// another cut parameter
 		float electronJetCloseness = 0.1;
 
 		for (int i = 0; i < branchJet4->GetEntries(); i++)
@@ -206,7 +206,7 @@ int main (int argc, char * argv[])
 		if (goodJets4.size() >= 2)
 		{
 			// add events to 4th bin of resolved the channel
-			h1->Fill(40);
+			h1->Fill(4);
 			std::vector<Jet> btagJet4;
 			for (size_t i = 0; i < goodJets4.size(); i++)
 			{
@@ -216,17 +216,17 @@ int main (int argc, char * argv[])
 				}
 			}
 
-			// cut events which whose jet4's aren't b-tagged
-			if (btagJet4.size() >=2)
+			// cut events whose jet4's aren't b-tagged
+			if (btagJet4.size() >= 2)
 			{
 				// add these events to the 5th bin of the resolved channel
-				h1->Fill(50);
+				h1->Fill(5);
 				// cut events whose dijet4mass is not within the range 111GeV < m(jj) < 141GeV
 				double dijet4mass = (btagJet4[0].P4() + btagJet4[1].P4()).M();
 				if (dijet4mass > dijetMaxmass || dijet4mass < dijetMinmass)
 				{
 					// add these events to the 6th bin of the resolved channel
-					h1->Fill(60);
+					h1->Fill(6);
 					resolved = true;	// this seems to be when the channel is determined to be resolved - wouldn't that make bin 4 and 5 of the resolved channel cut flow histogram not actually represent a resolved channel?
 				}
 			}
@@ -237,7 +237,7 @@ int main (int argc, char * argv[])
 		if (resolved == false)
 		{
 			// add events to the 4th bin of the merged channel
-			h2->Fill(40);
+			h2->Fill(4);
 
 			// select goodJet8 (jet pT > 315GeV, |eta| < 2)
 			for (int i = 0; i < branchJet8->GetEntries(); i++)
@@ -285,7 +285,7 @@ int main (int argc, char * argv[])
 			if(goodJets8.size() >= 1)
 			{
 				// add these events to the 5th bin of the merged channel
-				h2->Fill(50);
+				h2->Fill(5);
 				std::vector<Jet> btagJet8;
 				for (size_t i = 0; i < goodJets8.size(); i++)
 				{
@@ -298,14 +298,14 @@ int main (int argc, char * argv[])
 				if (btagJet8.size() >= 1)
 				{
 					// add these events to the 6th bin of the merged channel
-					h2->Fill(60);
+					h2->Fill(6);
 
 					// boost jet8 mass in the range 106GeV -> 146GeV
 					double jet8Mass = btagJet8[0].P4().M();
 					if (jet8Mass < boostjetMaxmass && jet8Mass > boostjetMinmass)
 					{
 						// add these events to the 7th bin of the merged channel
-						h2->Fill(70);
+						h2->Fill(7);
 					}
 				}
 			}
@@ -314,7 +314,7 @@ int main (int argc, char * argv[])
 			if (goodJets12.size() >= 1)
 			{
 				// add these events to the 8th bin of the merged channel
-				h2->Fill(80);
+				h2->Fill(8);
 				std::vector<Jet> btagJet12;
 				for (size_t i = 0; i < goodJets12.size(); i++)
 				{
@@ -328,45 +328,41 @@ int main (int argc, char * argv[])
 				if (btagJet12.size() >= 1)
 				{
 					// add these events to the 9th bin of the merged channel
-					h2->Fill(90);
+					h2->Fill(9);
 					// boost jet12 mass in the range 106GeV -> 146GeV
 					double jet12Mass = btagJet12[0].P4().M();
 					if (jet12Mass < boostjetMaxmass && jet12Mass > boostjetMinmass)
 					{
 						// add these events to the 10th bin of the merged channel
-						h2->Fill(100);
+						h2->Fill(10);
 					}
 				}
 			}
 		}
 	}
 
-	std::cout << "Flow r " << std::endl;
+	cout << "Flow r " << std::endl;
 	int nbins = h1->GetNbinsX();
 	for (int i = 1; i <= nbins; i++)
 	{
-		double items = h1->GetBinContent(i);
-		if (items > 0.0)
-		{
-			std::cout << "n=" << i << "  " <<  items << " ";
-		}
+		double items = 0.0;
+		items = h1->GetBinContent(i);
+		cout << "cut" << i << "\t" <<  items << endl;
 	}
 
-	std::cout << std::endl;
+	cout << endl;
 
-	std::cout << "Flow b " << std::endl;
+	cout << "Flow b " << endl;
 	int nbinsb = h2->GetNbinsX();
 
 	for (int i = 1; i <= nbinsb; i++)
 	{
-		double items = h2->GetBinContent(i);
-		if (items > 0.0)
-		{
-			std::cout << "n=" << i <<"  " << items << " ";
-		}
+		double items = 0.0;
+		items = h2->GetBinContent(i);
+		cout << "cut" << i << "\t" <<  items << endl;
 	}
 
-	std::cout << std::endl;
+	cout << endl;
 
 	return 0;
 }
