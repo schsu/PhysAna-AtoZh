@@ -150,7 +150,7 @@ int main (int argc, char * argv[])
 		// efficiency study for muons
 		for (int i = 0; i < branchMuon->GetEntries(); i++)
 		{
-			Muon * muon = (Muon*) branchElectron->At(i);
+			Muon * muon = (Muon*) branchMuon->At(i);
 
 			if (muon->PT > es_minpt && fabs(muon->Eta) < es_maxeta && fabs(muon->Eta) > es_mineta)
 			{
