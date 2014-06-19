@@ -70,21 +70,38 @@ int main (int argc, char * argv[])
 	TClonesArray * branchParticle = tr->UseBranch("Particle");
 
 	// create the histograms
+	// cut flow kinematics
+	TH1F * h_cut1_dielectron_pt = new TH1F("cut1 dielectron pt", "cut1 dielectron pt; pt (GeV, 100 bins); count", 100, 0, 300);
+	TH1F * h_cut2_dielectron_pt = new TH1F("cut2 dielectron pt", "cut2 dielectron pt; pt (GeV, 100 bins); count", 100, 0, 300);
+	TH1F * h_cut3_dielectron_pt = new TH1F("cut3 dielectron pt", "cut3 dielectron pt; pt (GeV, 100 bins); count", 100, 0, 300);
+
+	// electrons channel
 	TH1F * h_dielectron_mass = new TH1F("dielectron mass", "dielectron mass; mass (GeV, 100 bins); count", 100, 0, 300);
 	TH1F * h_dielectron_pt = new TH1F("dielectron pt", "dielectron pt; pt (GeV, 100 bins); count", 100, 0, 300);
 	TH1F * h_electron_deltar = new TH1F("electron delta r", "electron delta r; delta r (100 bins); count", 100, 0, 5);
 
+	TH1F * h_ec_dijet_mass = new TH1F("ec dijet mass", "ec dijet mass; mass (GeV, 100 bins); count", 100, 0, 300);
+	TH1F * h_ec_dijet_pt = new TH1F("ec dijet pt", "ec dijet pt; pt (GeV, 100 bins); count", 100, 0, 300);
+	TH1F * h_ec_jet_deltar = new TH1F("ec jet delta r", "ec jet delta r; delta r (100 bins); count", 100, 0, 5);
+	TH2F * h_ec_dijet_pt_vs_deltar = new TH2F("ec dijet pt vs delta r", "ec dijet pt vs delta r; dijet pt (GeV); delta r", 100, 0, 300, 100, 0, 5);
+
+	TH1F * h_ec_A_mass = new TH1F("ec A mass", "ec A mass; mass (GeV, 100 bins); count", 100, 100, 500);
+	TH1F * h_ec_A_pt = new TH1F("ec A pt", "ec A pt; pt (GeV, 100 bins); count", 100, 0, 300);
+	TH1F * h_ec_A_rapidity = new TH1F("ec A rapidity", "ec A rapidity; rapitidy (GeV, 100 bins); count", 100, -3.4, 3.4);
+
+	// muon channel
 	TH1F * h_dimuon_mass = new TH1F("dimuon mass", "dimuon mass; mass (GeV, 100 bins); count", 100, 0, 300);
 	TH1F * h_dimuon_pt = new TH1F("dimuon pt", "dimuon pt; pt (GeV, 100 bins); count", 100, 0, 300);
 	TH1F * h_muon_deltar = new TH1F("muon delta r", "muon delta r; delta r (100 bins); count", 100, 0, 5);
 
-	TH1F * h_dijet_mass = new TH1F("dijet mass", "dijet mass; mass (GeV, 100 bins); count", 100, 0, 300);
-	TH1F * h_dijet_pt = new TH1F("dijet pt", "dijet pt; pt (GeV, 100 bins); count", 100, 0, 300);
-	TH1F * h_jet_deltar = new TH1F("jet delta r", "jet delta r; delta r (100 bins); count", 100, 0, 5);
+	TH1F * h_mc_dijet_mass = new TH1F("mc dijet mass", "mc dijet mass; mass (GeV, 100 bins); count", 100, 0, 300);
+	TH1F * h_mc_dijet_pt = new TH1F("mc dijet pt", "mc dijet pt; pt (GeV, 100 bins); count", 100, 0, 300);
+	TH1F * h_mc_jet_deltar = new TH1F("mc jet delta r", "mc jet delta r; delta r (100 bins); count", 100, 0, 5);
+	TH2F * h_mc_dijet_pt_vs_deltar = new TH2F("mc dijet pt vs delta r", "mc dijet pt vs delta r; dijet pt (GeV); delta r", 100, 0, 300, 100, 0, 5);
 
-	TH1F * h_A_mass = new TH1F("A mass", "A mass; mass (GeV, 100 bins); count", 100, 100, 500);
-	TH1F * h_A_pt = new TH1F("A pt", "A pt; pt (GeV, 100 bins); count", 100, 0, 300);
-	TH1F * h_A_rapidity = new TH1F("A rapidity", "A rapidity; rapitidy (GeV, 100 bins); count", 100, -3.4, 3.4);
+	TH1F * h_mc_A_mass = new TH1F("mc A mass", "mc A mass; mass (GeV, 100 bins); count", 100, 100, 500);
+	TH1F * h_mc_A_pt = new TH1F("mc A pt", "mc A pt; pt (GeV, 100 bins); count", 100, 0, 300);
+	TH1F * h_mc_A_rapidity = new TH1F("mc A rapidity", "mc A rapidity; rapitidy (GeV, 100 bins); count", 100, -3.4, 3.4);
 
 	// pt/eta cut parameters
 	double electronMinPt = 20.0;
@@ -213,7 +230,7 @@ int main (int argc, char * argv[])
 			}
 		}
 
-		// if there is exactly 1 positive and 1 negative lepton (which passed the pt/eta cut)
+		// if there is at least 1 positive and 1 negative lepton (which passed the pt/eta cut)
 		if (havePositiveLepton && haveNegativeLepton)
 		{
 			// electron channel
@@ -221,28 +238,32 @@ int main (int argc, char * argv[])
 			if (goodElectrons.size() == 2 && goodMuons.size() == 0)
 			{
 				cut1_electrons += 2;
+				h_cut1_dielectron_pt->Fill((goodElectrons[0].P4() + goodElectrons[1].P4()).Pt());
 
 				// 2 jets
 				if (goodJets.size() == 2)
 				{
 					cut2_electrons += 2;
+					h_cut2_dielectron_pt->Fill((goodElectrons[0].P4() + goodElectrons[1].P4()).Pt());
 
 					// 2 b-jets
 					if (goodBJets.size() == 2)
 					{
 						cut3_electrons += 2;
+						h_cut3_dielectron_pt->Fill((goodElectrons[0].P4() + goodElectrons[1].P4()).Pt());
 
 						h_dielectron_mass->Fill((goodElectrons[0].P4() + goodElectrons[1].P4()).M());
 						h_dielectron_pt->Fill((goodElectrons[0].P4() + goodElectrons[1].P4()).Pt());
 						h_electron_deltar->Fill(goodElectrons[0].P4().DeltaR(goodElectrons[1].P4()));
 
-						h_dijet_mass->Fill((goodBJets[0].P4() + goodBJets[1].P4()).M());
-						h_dijet_pt->Fill((goodBJets[0].P4() + goodBJets[1].P4()).Pt());
-						h_jet_deltar->Fill(goodBJets[0].P4().DeltaR(goodBJets[1].P4()));
+						h_ec_dijet_mass->Fill((goodBJets[0].P4() + goodBJets[1].P4()).M());
+						h_ec_dijet_pt->Fill((goodBJets[0].P4() + goodBJets[1].P4()).Pt());
+						h_ec_jet_deltar->Fill(goodBJets[0].P4().DeltaR(goodBJets[1].P4()));
+						h_ec_dijet_pt_vs_deltar->Fill((goodBJets[0].P4() + goodBJets[1].P4()).Pt(), goodBJets[0].P4().DeltaR(goodBJets[1].P4()));
 
-						h_A_mass->Fill((goodBJets[0].P4() + goodBJets[1].P4() + goodElectrons[0].P4() + goodElectrons[1].P4()).M());
-						h_A_pt->Fill((goodBJets[0].P4() + goodBJets[1].P4() + goodElectrons[0].P4() + goodElectrons[1].P4()).Pt());
-						h_A_rapidity->Fill((goodBJets[0].P4() + goodBJets[1].P4() + goodElectrons[0].P4() + goodElectrons[1].P4()).Rapidity());
+						h_ec_A_mass->Fill((goodBJets[0].P4() + goodBJets[1].P4() + goodElectrons[0].P4() + goodElectrons[1].P4()).M());
+						h_ec_A_pt->Fill((goodBJets[0].P4() + goodBJets[1].P4() + goodElectrons[0].P4() + goodElectrons[1].P4()).Pt());
+						h_ec_A_rapidity->Fill((goodBJets[0].P4() + goodBJets[1].P4() + goodElectrons[0].P4() + goodElectrons[1].P4()).Rapidity());
 					}
 				}
 			}
@@ -267,64 +288,106 @@ int main (int argc, char * argv[])
 						h_dimuon_pt->Fill((goodMuons[0].P4() + goodMuons[1].P4()).Pt());
 						h_muon_deltar->Fill(goodMuons[0].P4().DeltaR(goodMuons[1].P4()));
 
-						h_dijet_mass->Fill((goodBJets[0].P4() + goodBJets[1].P4()).M());
-						h_dijet_pt->Fill((goodBJets[0].P4() + goodBJets[1].P4()).Pt());
-						h_jet_deltar->Fill(goodBJets[0].P4().DeltaR(goodBJets[1].P4()));
+						h_mc_dijet_mass->Fill((goodBJets[0].P4() + goodBJets[1].P4()).M());
+						h_mc_dijet_pt->Fill((goodBJets[0].P4() + goodBJets[1].P4()).Pt());
+						h_mc_jet_deltar->Fill(goodBJets[0].P4().DeltaR(goodBJets[1].P4()));
+						h_mc_dijet_pt_vs_deltar->Fill((goodBJets[0].P4() + goodBJets[1].P4()).Pt(), goodBJets[0].P4().DeltaR(goodBJets[1].P4()));
 
-						h_A_mass->Fill((goodBJets[0].P4() + goodBJets[1].P4() + goodMuons[0].P4() + goodMuons[1].P4()).M());
-						h_A_pt->Fill((goodBJets[0].P4() + goodBJets[1].P4() + goodMuons[0].P4() + goodMuons[1].P4()).Pt());
-						h_A_rapidity->Fill((goodBJets[0].P4() + goodBJets[1].P4() + goodMuons[0].P4() + goodMuons[1].P4()).Rapidity());
+						h_mc_A_mass->Fill((goodBJets[0].P4() + goodBJets[1].P4() + goodMuons[0].P4() + goodMuons[1].P4()).M());
+						h_mc_A_pt->Fill((goodBJets[0].P4() + goodBJets[1].P4() + goodMuons[0].P4() + goodMuons[1].P4()).Pt());
+						h_mc_A_rapidity->Fill((goodBJets[0].P4() + goodBJets[1].P4() + goodMuons[0].P4() + goodMuons[1].P4()).Rapidity());
 					}
 				}
 			}
 		}
 	}
 
-	// make the directory for the plots
+	// make the directories for the plots
 	mkdir("cut_plots", 0777);
+	mkdir("cut_plots/electron_channel", 0777);
+	mkdir("cut_plots/muon_channel", 0777);
+	mkdir("cut_plots/electron_channel/cut_flow_kinematics", 0777);
 
 	// output the histograms
 	TCanvas * c1 = new TCanvas("c1", "c1", 640, 480);
 
+	// electron channel
 	// mass
 	h_dielectron_mass->Draw();
-	c1->SaveAs("cut_plots/dielectron_mass.eps");
+	c1->SaveAs("cut_plots/electron_channel/dielectron_mass.eps");
 
-	h_dimuon_mass->Draw();
-	c1->SaveAs("cut_plots/dimuon_mass.eps");
+	h_ec_dijet_mass->Draw();
+	c1->SaveAs("cut_plots/electron_channel/ec_dijet_mass.eps");
 
-	h_dijet_mass->Draw();
-	c1->SaveAs("cut_plots/dijet_mass.eps");
+	h_ec_A_mass->Draw();
+	c1->SaveAs("cut_plots/electron_channel/ec_A_mass.eps");
 
 	// pt
 	h_dielectron_pt->Draw();
-	c1->SaveAs("cut_plots/dielectron_pt.eps");
+	c1->SaveAs("cut_plots/electron_channel/dielectron_pt.eps");
 
-	h_dimuon_pt->Draw();
-	c1->SaveAs("cut_plots/dimuon_pt.eps");
+	h_ec_dijet_pt->Draw();
+	c1->SaveAs("cut_plots/electron_channel/ec_dijet_pt.eps");
 
-	h_dijet_pt->Draw();
-	c1->SaveAs("cut_plots/dijet_pt.eps");
+	h_ec_A_pt->Draw();
+	c1->SaveAs("cut_plots/electron_channel/ec_A_pt.eps");
 
-	// A
-	h_A_mass->Draw();
-	c1->SaveAs("cut_plots/A_mass.eps");
-
-	h_A_pt->Draw();
-	c1->SaveAs("cut_plots/A_pt.eps");
-
-	h_A_rapidity->Draw();
-	c1->SaveAs("cut_plots/A_rapidity.eps");
+	// rapidity
+	h_ec_A_rapidity->Draw();
+	c1->SaveAs("cut_plots/electron_channel/ec_A_rapidity.eps");
 
 	// deltar
 	h_electron_deltar->Draw();
-	c1->SaveAs("cut_plots/electron_deltar.eps");
+	c1->SaveAs("cut_plots/electron_channel/electron_deltar.eps");
 
+	h_ec_jet_deltar->Draw();
+	c1->SaveAs("cut_plots/electron_channel/ec_jet_deltar.eps");
+
+	h_ec_dijet_pt_vs_deltar->Draw();
+	c1->SaveAs("cut_plots/electron_channel/ec_dijet_pt_vs_deltar.eps");
+
+	// muon channel
+	// mass
+	h_dimuon_mass->Draw();
+	c1->SaveAs("cut_plots/muon_channel/dimuon_mass.eps");
+
+	h_mc_dijet_mass->Draw();
+	c1->SaveAs("cut_plots/muon_channel/mc_dijet_mass.eps");
+
+	h_mc_A_mass->Draw();
+	c1->SaveAs("cut_plots/muon_channel/mc_A_mass.eps");
+
+	// pt
+	h_dimuon_pt->Draw();
+	c1->SaveAs("cut_plots/muon_channel/dimuon_pt.eps");
+
+	h_mc_dijet_pt->Draw();
+	c1->SaveAs("cut_plots/muon_channel/mc_dijet_pt.eps");
+
+	h_mc_A_pt->Draw();
+	c1->SaveAs("cut_plots/muon_channel/mc_A_pt.eps");
+
+	// rapidity
+	h_mc_A_rapidity->Draw();
+	c1->SaveAs("cut_plots/muon_channel/mc_A_rapidity.eps");
+
+	// deltar
 	h_muon_deltar->Draw();
-	c1->SaveAs("cut_plots/muon_deltar.eps");
+	c1->SaveAs("cut_plots/muon_channel/muon_deltar.eps");
 
-	h_jet_deltar->Draw();
-	c1->SaveAs("jet_deltar.eps");
+	h_mc_jet_deltar->Draw();
+	c1->SaveAs("cut_plots/muon_channel/mc_jet_deltar.eps");
+
+	h_mc_dijet_pt_vs_deltar->Draw();
+	c1->SaveAs("cut_plots/muon_channel/mc_dijet_pt_vs_deltar.eps");
+
+	// cut flow kinematics
+	h_cut1_dielectron_pt->Draw();
+	c1->SaveAs("cut_plots/electron_channel/cut_flow_kinematics/cut1_dielectron_pt.eps");
+	h_cut2_dielectron_pt->Draw();
+	c1->SaveAs("cut_plots/electron_channel/cut_flow_kinematics/cut2_dielectron_pt.eps");
+	h_cut3_dielectron_pt->Draw();
+	c1->SaveAs("cut_plots/electron_channel/cut_flow_kinematics/cut3_dielectron_pt.eps");
 
 	// output efficiency information
 	cout << endl;
