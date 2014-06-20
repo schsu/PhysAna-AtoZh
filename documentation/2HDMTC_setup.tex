@@ -1,0 +1,79 @@
+\documentclass{article}
+
+% packages
+\usepackage{hyperref}
+
+% document style
+\usepackage[margin = 20mm]{geometry}
+\setlength\parindent{0pt}
+
+\begin{document}
+
+\section*{Setting up MadGraph, Pythia, Delphes, and the 2HDMTC Model}
+
+The 2HDMTC model is a model for decays involving the heavy Higgs particle, referred to as A or h3. This model currently does not work with the newest version of MadGraph, so there are some technical complications in getting the model to work with MadGraph, Pythia, and Delphes. This document aims to be a step-by-step manual for installing and configuring MadGraph, Pythia, Delphes, and the 2HDMTC model to create a working environment for heavy Higgs Montecarlo studies.
+
+\section{Installing ROOT}
+
+wget ftp://root.cern.ch/root/root\_v5.34.14.source.tar.gz
+
+tar -xzf root\_v5.34.14.source.tar.gz
+
+cd root
+
+./configure
+
+make
+
+source root/bin/thisroot.sh
+
+\section{Installing MadGraph}
+
+wget https://launchpad.net/mg5amcnli/trunk/1.5.0/+download/MadGraph5\_v1.5.14.tar.gz
+
+tar -xzf MadGraph5\_v1.5.14.tar.gz
+
+\section {Installing Pythia}
+
+wget http://madgraph.hep.uiuc.edu/Downloads/pythia-pgs\_V2.2.0.tar.gz
+
+tar -xzf pythia-pgs\_V2.2.0.tar.gz
+
+cd pythia-pgs
+
+cd src
+
+edit makefile
+
+Links = mass\_width\_2004.mc pgs clean\_output PDFsets pydata.f -> Links = mass\_width\_2004.c PDFsets pydata.f
+
+cd ..
+
+make
+
+\section {Installing Delphes}
+
+cd MadGraph5\_v1.5.14
+
+wget http://cp3.irmp.ucl.ac.be/downloads/Delphes-3.0.12.tar.gz
+
+tar -xzf Delphes-3.0.12.tar.gz
+
+mv Delphes-3.0.12 Delphes
+
+make
+
+\section {Installing 2HDMTC Model}
+
+wget https://sharepoint.washington.edu/phys/wiki/tev-cluster/Documents/2HDM4TC.zip --user=usr --password=pwd
+
+unzip 2HDMTC.zip
+
+cd 2HDM4TC
+
+edit makefile
+
+F77 = gfortran
+FFLAGS = -O -ffixed-line-length-192
+
+\end{document}

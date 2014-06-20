@@ -85,6 +85,7 @@ int main (int argc, char * argv[])
 	TH1F * h_ec_dijet4_pt = new TH1F("ec dijet4 pt", "ec dijet4 pt; pt (GeV, 100 bins); count", 100, 0, 300);
 	TH1F * h_ec_jet4_deltar = new TH1F("ec jet4 delta r", "ec jet4 delta r; delta r (100 bins); count", 100, 0, 5);
 	TH2F * h_ec_dijet4_pt_vs_deltar = new TH2F("ec dijet4 pt vs delta r", "ec dijet4 pt vs delta r; dijet4 pt (GeV); delta r", 100, 0, 300, 100, 0, 5);
+	TH1F * h_ec_dijet4_multiplicity = new TH1F("ec diject4 multiplicity", "ec dijet4 multiplicity; dijet4 multiplicity; count", 4, 0, 4);
 
 	TH1F * h_ec_A_mass = new TH1F("ec A mass", "ec A mass; mass (GeV, 100 bins); count", 100, 100, 500);
 	TH1F * h_ec_A_pt = new TH1F("ec A pt", "ec A pt; pt (GeV, 100 bins); count", 100, 0, 300);
@@ -277,6 +278,7 @@ int main (int argc, char * argv[])
 			if (goodJets4[i].BTag == 1)
 			{
 				goodBJets4.push_back(goodJets4[i]);
+				h_ec_dijet4_multiplicity->Fill(goodBJets4.size());
 			}
 		}
 
@@ -436,6 +438,9 @@ int main (int argc, char * argv[])
 
 	h_ec_dijet4_pt_vs_deltar->Draw();
 	c1->SaveAs("cut_plots/electron_channel/ec_dijet4_pt_vs_deltar.eps");
+
+	h_ec_dijet4_multiplicity->Draw();
+	c1->SaveAs("cut_plots/electron_channel/ec_dijet4_multiplicity.eps");
 
 	// muon channel
 	// mass
