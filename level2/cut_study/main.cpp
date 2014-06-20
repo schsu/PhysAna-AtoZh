@@ -72,10 +72,11 @@ int main (int argc, char * argv[])
 	// create the histograms
 	// cut flow kinematics
 	TH1F * h_ll_dielectron_pt = new TH1F("ll dielectron pt", "ll dielectron pt; pt (GeV, 100 bins); count", 100, 0, 300);
-	TH1F * h_jj_dielectron_pt = new TH1F("jj dielectron pt", "jj dielectron pt; pt (GeV, 100 bins); count", 100, 0, 300);
-	TH1F * h_bb_dielectron_pt = new TH1F("bb dielectron pt", "bb dielectron pt; pt (GeV, 100 bins); count", 100, 0, 300);
+	TH1F * h_lljj_dielectron_pt = new TH1F("lljj dielectron pt", "lljj dielectron pt; pt (GeV, 100 bins); count", 100, 0, 300);
+	TH1F * h_llbb_dielectron_pt = new TH1F("llbb dielectron pt", "llbb dielectron pt; pt (GeV, 100 bins); count", 100, 0, 300);
+	TH1F * h_mllmbb_dielectron_pt = new TH1F("mllmbb dielectron pt", "mllmbb dielectron pt; pt (GeV, 100 bins); count", 100, 0, 300);
 
-	// electrons channel
+	// electron channel
 	TH1F * h_dielectron_mass = new TH1F("dielectron mass", "dielectron mass; mass (GeV, 100 bins); count", 100, 0, 300);
 	TH1F * h_dielectron_pt = new TH1F("dielectron pt", "dielectron pt; pt (GeV, 100 bins); count", 100, 0, 300);
 	TH1F * h_electron_deltar = new TH1F("electron delta r", "electron delta r; delta r (100 bins); count", 100, 0, 5);
@@ -104,12 +105,18 @@ int main (int argc, char * argv[])
 	TH1F * h_mc_A_rapidity = new TH1F("mc A rapidity", "mc A rapidity; rapitidy (GeV, 100 bins); count", 100, -3.4, 3.4);
 
 	// pt/eta cut parameters
-	double electronMinPt = 20.0;
+	double electronMinPt = 5.0;
 	double electronMaxEta = 2.5;
-	double muonMinPt = 20.0;
+	double muonMinPt = 5.0;
 	double muonMaxEta = 2.5;
 	double jet4MinPt = 20.0;
 	double jet4MaxEta = 2.5;
+
+	// mass cut parameters
+	double llMinMass = 80;
+	double llMaxMass = 100;
+	double bbMinMass = 111;
+	double bbMaxMass = 141;
 
 	// efficiency study for muons
 	double es_minpt = 10.0;
@@ -129,19 +136,29 @@ int main (int argc, char * argv[])
 	int64_t ll_electrons = 0;
 	int64_t ll_muons = 0;
 
-	// jj cut - 2 jets in pt/eta range
-	int64_t jj_electrons = 0;
-	int64_t jj_muons = 0;
+	// lljj cut - 2 jets in pt/eta range
+	int64_t lljj_electrons = 0;
+	int64_t lljj_muons = 0;
 
-	// bb cut - 2 b-tagged jets
-	int64_t bb_electrons = 0;
-	int64_t bb_muons = 0;
+	// llbb cut - 2 b-tagged jets
+	int64_t llbb_electrons = 0;
+	int64_t llbb_muons = 0;
+
+	// counters for event efficiencies
+	int64_t total_events = 0;
+	int64_t ll_events = 0;
+	int64_t lljj_events = 0;
+	int64_t llbb_events = 0;
+	int64_t mllmbb_events = 0;
 
 	// loop over each event
 	for(Int_t entry = 0; entry < numberofEntries; entry++)
 	{
 		// load selected branches
 		tr->ReadEntry(entry);
+
+		// add to the total number of events
+		total_events += 1;
 
 		// count all detected electrons and muons from the electron and muon branches
 		detected_electrons += branchElectron->GetEntries();
@@ -270,65 +287,106 @@ int main (int argc, char * argv[])
 			// 2 electrons
 			if (goodElectrons.size() == 2 && goodMuons.size() == 0)
 			{
+				double mee = (goodElectrons[0].P4() + goodElectrons[1].P4()).M();
+				double ptee = (goodElectrons[0].P4() + goodElectrons[1].P4()).Pt();
+				double dree = goodElectrons[0].P4().DeltaR(goodElectrons[1].P4());
+
+				ll_events += 1;
 				ll_electrons += 2;
-				h_ll_dielectron_pt->Fill((goodElectrons[0].P4() + goodElectrons[1].P4()).Pt());
+				h_ll_dielectron_pt->Fill(ptee);
 
 				// 2 jets
-				if (goodJets4.size() == 2)
+				if (goodJets4.size() >= 2)
 				{
-					jj_electrons += 2;
-					h_jj_dielectron_pt->Fill((goodElectrons[0].P4() + goodElectrons[1].P4()).Pt());
+					lljj_events += 1;
+					lljj_electrons += 2;
+					h_lljj_dielectron_pt->Fill(ptee);
 
 					// 2 b-jets
-					if (goodBJets4.size() == 2)
+					if (goodBJets4.size() >= 2)
 					{
-						bb_electrons += 2;
-						h_bb_dielectron_pt->Fill((goodElectrons[0].P4() + goodElectrons[1].P4()).Pt());
+						double mbb = (goodBJets4[0].P4() + goodBJets4[1].P4()).M();
+						double ptbb = (goodBJets4[0].P4() + goodBJets4[1].P4()).Pt();
+						double drbb = goodBJets4[0].P4().DeltaR(goodBJets4[1].P4());
 
-						h_dielectron_mass->Fill((goodElectrons[0].P4() + goodElectrons[1].P4()).M());
-						h_dielectron_pt->Fill((goodElectrons[0].P4() + goodElectrons[1].P4()).Pt());
-						h_electron_deltar->Fill(goodElectrons[0].P4().DeltaR(goodElectrons[1].P4()));
+						double mA = (goodBJets4[0].P4() + goodBJets4[1].P4() + goodElectrons[0].P4() + goodElectrons[1].P4()).M();
+						double ptA = (goodBJets4[0].P4() + goodBJets4[1].P4() + goodElectrons[0].P4() + goodElectrons[1].P4()).Pt();
+						double rA = (goodBJets4[0].P4() + goodBJets4[1].P4() + goodElectrons[0].P4() + goodElectrons[1].P4()).Rapidity();
 
-						h_ec_dijet4_mass->Fill((goodBJets4[0].P4() + goodBJets4[1].P4()).M());
-						h_ec_dijet4_pt->Fill((goodBJets4[0].P4() + goodBJets4[1].P4()).Pt());
-						h_ec_jet4_deltar->Fill(goodBJets4[0].P4().DeltaR(goodBJets4[1].P4()));
-						h_ec_dijet4_pt_vs_deltar->Fill((goodBJets4[0].P4() + goodBJets4[1].P4()).Pt(), goodBJets4[0].P4().DeltaR(goodBJets4[1].P4()));
+						llbb_events += 1;
+						llbb_electrons += 2;
+						h_llbb_dielectron_pt->Fill(ptee);
 
-						h_ec_A_mass->Fill((goodBJets4[0].P4() + goodBJets4[1].P4() + goodElectrons[0].P4() + goodElectrons[1].P4()).M());
-						h_ec_A_pt->Fill((goodBJets4[0].P4() + goodBJets4[1].P4() + goodElectrons[0].P4() + goodElectrons[1].P4()).Pt());
-						h_ec_A_rapidity->Fill((goodBJets4[0].P4() + goodBJets4[1].P4() + goodElectrons[0].P4() + goodElectrons[1].P4()).Rapidity());
+						h_dielectron_mass->Fill(mee);
+						h_dielectron_pt->Fill(ptee);
+						h_electron_deltar->Fill(dree);
+
+						h_ec_dijet4_mass->Fill(mbb);
+						h_ec_dijet4_pt->Fill(ptbb);
+						h_ec_jet4_deltar->Fill(drbb);
+						h_ec_dijet4_pt_vs_deltar->Fill(ptbb, drbb);
+
+						h_ec_A_mass->Fill(mA);
+						h_ec_A_pt->Fill(ptA);
+						h_ec_A_rapidity->Fill(rA);
+
+						if (mee < llMaxMass && mee > llMinMass && mbb < bbMaxMass && mbb > bbMinMass)
+						{
+							mllmbb_events += 1;
+							h_mllmbb_dielectron_pt->Fill(mee);
+						}
 					}
 				}
 			}
 
 			// muon channel
 			// 2 muons
-			else if (goodElectrons.size() == 0 && goodMuons.size() == 2)
+			else if (goodMuons.size() == 2 && goodElectrons.size() == 0)
 			{
+				double mmumu = (goodMuons[0].P4() + goodMuons[1].P4()).M();
+				double ptmumu = (goodMuons[0].P4() + goodMuons[1].P4()).Pt();
+				double drmumu = goodMuons[0].P4().DeltaR(goodMuons[1].P4());
+
+				ll_events += 1;
 				ll_muons += 2;
 
 				// 2 jets
-				if (goodJets4.size() == 2)
+				if (goodJets4.size() >= 2)
 				{
-					jj_muons += 2;
+					lljj_events += 1;
+					lljj_muons += 2;
 
 					// 2 b-jets
-					if (goodBJets4.size() == 2)
+					if (goodBJets4.size() >= 2)
 					{
-						bb_muons += 2;
+						double mbb = (goodBJets4[0].P4() + goodBJets4[1].P4()).M();
+						double ptbb = (goodBJets4[0].P4() + goodBJets4[1].P4()).Pt();
+						double drbb = goodBJets4[0].P4().DeltaR(goodBJets4[1].P4());
 
-						h_dimuon_mass->Fill((goodMuons[0].P4() + goodMuons[1].P4()).M());
-						h_dimuon_pt->Fill((goodMuons[0].P4() + goodMuons[1].P4()).Pt());
-						h_muon_deltar->Fill(goodMuons[0].P4().DeltaR(goodMuons[1].P4()));
+						double mA = (goodBJets4[0].P4() + goodBJets4[1].P4() + goodMuons[0].P4() + goodMuons[1].P4()).M();
+						double ptA = (goodBJets4[0].P4() + goodBJets4[1].P4() + goodMuons[0].P4() + goodMuons[1].P4()).Pt();
+						double rA = (goodBJets4[0].P4() + goodBJets4[1].P4() + goodMuons[0].P4() + goodMuons[1].P4()).Rapidity();
 
-						h_mc_dijet4_mass->Fill((goodBJets4[0].P4() + goodBJets4[1].P4()).M());
-						h_mc_dijet4_pt->Fill((goodBJets4[0].P4() + goodBJets4[1].P4()).Pt());
-						h_mc_jet4_deltar->Fill(goodBJets4[0].P4().DeltaR(goodBJets4[1].P4()));
-						h_mc_dijet4_pt_vs_deltar->Fill((goodBJets4[0].P4() + goodBJets4[1].P4()).Pt(), goodBJets4[0].P4().DeltaR(goodBJets4[1].P4()));
+						llbb_events += 1;
+						llbb_muons += 2;
 
-						h_mc_A_mass->Fill((goodBJets4[0].P4() + goodBJets4[1].P4() + goodMuons[0].P4() + goodMuons[1].P4()).M());
-						h_mc_A_pt->Fill((goodBJets4[0].P4() + goodBJets4[1].P4() + goodMuons[0].P4() + goodMuons[1].P4()).Pt());
-						h_mc_A_rapidity->Fill((goodBJets4[0].P4() + goodBJets4[1].P4() + goodMuons[0].P4() + goodMuons[1].P4()).Rapidity());
+						h_dielectron_mass->Fill(mmumu);
+						h_dielectron_pt->Fill(ptmumu);
+						h_electron_deltar->Fill(drmumu);
+
+						h_ec_dijet4_mass->Fill(mbb);
+						h_ec_dijet4_pt->Fill(ptbb);
+						h_ec_jet4_deltar->Fill(drbb);
+						h_ec_dijet4_pt_vs_deltar->Fill(ptbb, drbb);
+
+						h_ec_A_mass->Fill(mA);
+						h_ec_A_pt->Fill(ptA);
+						h_ec_A_rapidity->Fill(rA);
+
+						if (mmumu < llMaxMass && mmumu > llMinMass && mbb < bbMaxMass && mbb > bbMinMass)
+						{
+							mllmbb_events += 1;
+						}
 					}
 				}
 			}
@@ -417,22 +475,35 @@ int main (int argc, char * argv[])
 	// cut flow kinematics
 	h_ll_dielectron_pt->Draw();
 	c1->SaveAs("cut_plots/electron_channel/cut_flow_kinematics/ll_dielectron_pt.eps");
-	h_jj_dielectron_pt->Draw();
-	c1->SaveAs("cut_plots/electron_channel/cut_flow_kinematics/jj_dielectron_pt.eps");
-	h_bb_dielectron_pt->Draw();
-	c1->SaveAs("cut_plots/electron_channel/cut_flow_kinematics/bb_dielectron_pt.eps");
+	h_lljj_dielectron_pt->Draw();
+	c1->SaveAs("cut_plots/electron_channel/cut_flow_kinematics/lljj_dielectron_pt.eps");
+	h_llbb_dielectron_pt->Draw();
+	c1->SaveAs("cut_plots/electron_channel/cut_flow_kinematics/llbb_dielectron_pt.eps");
+	h_mllmbb_dielectron_pt->Draw();
+	c1->SaveAs("cut_plots/electron_channel/cut_flow_kinematics/mllmbb_dielectron_pt.eps");
 
 	// output efficiency information
 	cout << endl;
 	cout << "detected_electron_efficiency" << "\t" << (float) (detected_electrons) / (float) (truth_electrons) << endl;
-	cout << "ll_electron_efficiency" << "\t" << (float) (ll_electrons) / (float) (truth_electrons) << endl;
-	cout << "jj_electron_efficiency" << "\t" << (float) (jj_electrons) / (float) (truth_electrons) << endl;
-	cout << "bb_electron_efficiency" << "\t" << (float) (bb_electrons) / (float) (truth_electrons) << endl;
+	cout << "ll_electron_efficiency" << "\t\t" << (float) (ll_electrons) / (float) (truth_electrons) << endl;
+	cout << "lljj_electron_efficiency" << "\t" << (float) (lljj_electrons) / (float) (truth_electrons) << endl;
+	cout << "llbb_electron_efficiency" << "\t" << (float) (llbb_electrons) / (float) (truth_electrons) << endl;
 	cout << endl;
 	cout << "detected_muon_efficiency" << "\t" << (float) (detected_muons) / (float) (truth_muons) << endl;
 	cout << "ll_muon_efficiency" << "\t\t" << (float) (ll_muons) / (float) (truth_muons) << endl;
-	cout << "jj_muon_efficiency" << "\t\t" << (float) (jj_muons) / (float) (truth_muons) << endl;
-	cout << "bb_muon_efficiency" << "\t\t" << (float) (bb_muons) / (float) (truth_muons) << endl;
+	cout << "lljj_muon_efficiency" << "\t\t" << (float) (lljj_muons) / (float) (truth_muons) << endl;
+	cout << "llbb_muon_efficiency" << "\t\t" << (float) (llbb_muons) / (float) (truth_muons) << endl;
+	cout << endl;
+	cout << "total_events" << "\t\t" << total_events << endl;
+	cout << "ll_events" << "\t\t" << ll_events << endl;
+	cout << "lljj_events" << "\t\t" << lljj_events << endl;
+	cout << "llbb_events" << "\t\t" << llbb_events << endl;
+	cout << "mllmbb_events" << "\t\t" << mllmbb_events << endl;
+
+	cout << "ll_event_efficiency" << "\t" << (float) (ll_events) / (float) (total_events) << endl;
+	cout << "lljj_event_efficiency" << "\t" << (float) (lljj_events) / (float) (total_events) << endl;
+	cout << "llbb_event_efficiency" << "\t" << (float) (llbb_events) / (float) (total_events) << endl;
+	cout << "mllmbb_event_efficiency" << "\t" << (float) (mllmbb_events) / (float) (total_events) << endl;
 	cout << endl;
 
 	// efficiency study for muons
