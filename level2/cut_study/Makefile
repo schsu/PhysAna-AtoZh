@@ -2,7 +2,7 @@ SRC := $(wildcard *.cpp)
 OBJ := $(SRC:.cpp=.o)
 CFLAGS := -O3
 LDFLAGS= -L$(DELPHESPATH) -lDelphes
-INCLUDES =  -I$(DELPHESPATH)
+INCLUDES = -I$(DELPHESPATH)
 ROOTCFLAGS := $(shell root-config --cflags)
 ROOTGLIBS := $(shell root-config --glibs)
 

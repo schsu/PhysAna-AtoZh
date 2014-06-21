@@ -1,4 +1,4 @@
-This is pdfTeXk, Version 3.141592-1.40.3 (Web2C 7.5.6) (format=latex 2014.4.8)  20 JUN 2014 13:05
+This is pdfTeXk, Version 3.141592-1.40.3 (Web2C 7.5.6) (format=latex 2014.4.8)  20 JUN 2014 17:29
 entering extended mode
  %&-line parsing enabled.
 **2HDMTC_setup.tex
@@ -88,6 +88,12 @@ File: pdfmark.def 2007/02/07 v6.75r Hyperref definitions for pdfmark specials
 \pdf@defaulttoks=\toks19
 \Fld@listcount=\count93
 ))
+(/usr/share/texmf/tex/latex/tools/verbatim.sty
+Package: verbatim 2003/08/22 v1.5q LaTeX2e package for verbatim enhancements
+\every@verbatim=\toks20
+\verbatim@line=\toks21
+\verbatim@in@stream=\read1
+)
 (/usr/share/texmf/tex/latex/geometry/geometry.sty
 Package: geometry 2002/07/08 v3.2 Page Geometry
 \Gm@cnth=\count94
@@ -97,26 +103,26 @@ Package: geometry 2002/07/08 v3.2 Page Geometry
 \Gm@wd@mp=\dimen107
 \Gm@odd@mp=\dimen108
 \Gm@even@mp=\dimen109
-\Gm@dimlist=\toks20
+\Gm@dimlist=\toks22
 
 (/usr/share/texmf/tex/xelatex/xetexconfig/geometry.cfg)) (./2HDMTC_setup.aux)
 \openout1 = `2HDMTC_setup.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 10.
-LaTeX Font Info:    ... okay on input line 10.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 10.
-LaTeX Font Info:    ... okay on input line 10.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 10.
-LaTeX Font Info:    ... okay on input line 10.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 10.
-LaTeX Font Info:    ... okay on input line 10.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 10.
-LaTeX Font Info:    ... okay on input line 10.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 10.
-LaTeX Font Info:    ... okay on input line 10.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 10.
-LaTeX Font Info:    ... okay on input line 10.
-Package hyperref Info: Link coloring OFF on input line 10.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 11.
+LaTeX Font Info:    ... okay on input line 11.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 11.
+LaTeX Font Info:    ... okay on input line 11.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 11.
+LaTeX Font Info:    ... okay on input line 11.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 11.
+LaTeX Font Info:    ... okay on input line 11.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 11.
+LaTeX Font Info:    ... okay on input line 11.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 11.
+LaTeX Font Info:    ... okay on input line 11.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 11.
+LaTeX Font Info:    ... okay on input line 11.
+Package hyperref Info: Link coloring OFF on input line 11.
 
 (/usr/share/texmf/tex/latex/hyperref/nameref.sty
 Package: nameref 2006/12/27 v2.28 Cross-referencing by name of section
@@ -126,16 +132,12 @@ Package: refcount 2006/02/20 v3.0 Data extraction from references (HO)
 )
 \c@section@level=\count97
 )
-LaTeX Info: Redefining \ref on input line 10.
-LaTeX Info: Redefining \pageref on input line 10.
+LaTeX Info: Redefining \ref on input line 11.
+LaTeX Info: Redefining \pageref on input line 11.
  (./2HDMTC_setup.out)
 (./2HDMTC_setup.out)
 \@outlinefile=\write3
 \openout3 = `2HDMTC_setup.out'.
-
-
-
-Package hyperref Warning: Rerun to get /PageLabels entry.
 
 -------------------- Geometry parameters
 paper: class default
@@ -176,22 +178,16 @@ driver:
 
 (1in=72.27pt, 1cm=28.45pt)
 -----------------------
+ [1
 
-Overfull \hbox (14.9337pt too wide) in paragraph at lines 68--69
-\OT1/cmr/m/n/10 wget https://sharepoint.washington.edu/phys/wiki/tev-cluster/Do
-cuments/2HDM4TC.zip --user=usr --password=pwd 
- []
-
-[1
-
-] (./2HDMTC_setup.aux) ) 
+] [2] (./2HDMTC_setup.aux) ) 
 Here is how much of TeX's memory you used:
- 2488 strings out of 256217
- 35494 string characters out of 1917096
- 96917 words of memory out of 1500000
- 5811 multiletter control sequences out of 10000+200000
- 4245 words of font info for 16 fonts, out of 1200000 for 2000
+ 2523 strings out of 256217
+ 36038 string characters out of 1917096
+ 98548 words of memory out of 1500000
+ 5842 multiletter control sequences out of 10000+200000
+ 4413 words of font info for 17 fonts, out of 1200000 for 2000
  645 hyphenation exceptions out of 8191
- 25i,5n,36p,490b,346s stack positions out of 5000i,500n,6000p,200000b,15000s
+ 25i,5n,36p,490b,488s stack positions out of 5000i,500n,6000p,200000b,15000s
 
-Output written on 2HDMTC_setup.dvi (1 page, 5000 bytes).
+Output written on 2HDMTC_setup.dvi (2 pages, 7440 bytes).
