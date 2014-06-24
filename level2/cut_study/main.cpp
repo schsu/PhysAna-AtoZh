@@ -123,29 +123,30 @@ int main (int argc, char * argv[])
 	TH1F * h_mc_mer_A_rapidity = new TH1F("mc mer A rapidity", "mc mer A rapidity; rapitidy (GeV, 100 bins); count", 100, -3.4, 3.4);
 
 	// pt/eta cut parameters
-	double electronMinPt = 5.0;
+	double electronMinPt = 20.0;
 	double electronMaxEta = 2.5;
-	double muonMinPt = 5.0;
+	double muonMinPt = 20.0;
 	double muonMaxEta = 2.5;
-	double jet4MinPt = 25.0;
-	double jet4MaxEta = 2.0;
-	double jet8MinPt = 25.0;
-	double jet8MaxEta = 2.0;
+	double jet4MinPt = 30.0;
+	double jet4MaxEta = 2.5;
+	double jet8MinPt = 350.0;
+	double jet8MaxEta = 2.5;
 
 	// mass cut parameters
-	double llMinMass = 80;
-	double llMaxMass = 100;
-	double bbMinMass = 111;
-	double bbMaxMass = 141;
-	double BMinMass = 106;
-	double BMaxMass = 146;
+	double llMinMass = 0;
+	double llMaxMass = 10000;
+	double bbMinMass = 0;
+	double bbMaxMass = 10000;
+	double BMinMass = 0;
+	double BMaxMass = 10000;
 
 	// counters for event efficiencies
 	int total_events = 0;
 
 	int ee_events = 0;
+	int total_truth_ee_events = 0;
+	int truth_ee_events = 0;
 	int mee_events = 0;
-
 	int eejj_events = 0;
 	int meejj_events = 0;
 	int eebb_events = 0;
@@ -159,6 +160,8 @@ int main (int argc, char * argv[])
 	int meemB_events = 0;
 
 	int mumu_events = 0;
+	int total_truth_mumu_events = 0;
+	int truth_mumu_events = 0;
 	int mmumu_events = 0;
 	int mumujj_events = 0;
 	int mmumujj_events = 0;
@@ -235,7 +238,6 @@ int main (int argc, char * argv[])
 			}
 		}
 
-
 		// apply the pt/eta cut to jets4
 		for (int i = 0; i < branchJet4->GetEntries(); i++)
 		{
@@ -281,8 +283,9 @@ int main (int argc, char * argv[])
 		{
 			// electron channel
 			// ee cut
-			if (goodElectrons.size() == 2 && goodMuons.size() == 0)
+			if (goodElectrons.size() >= 2)// && goodMuons.size() == 0)
 			{
+
 				ee_events += 1;
 
 				double mee = (goodElectrons[0].P4() + goodElectrons[1].P4()).M();
@@ -396,8 +399,9 @@ int main (int argc, char * argv[])
 
 			// muon channel
 			// mumu cut
-			else if (goodMuons.size() == 2 && goodElectrons.size() == 0)
+			if (goodMuons.size() >= 2)// && goodElectrons.size() == 0)
 			{
+
 				mumu_events += 1;
 
 				double mmumu = (goodMuons[0].P4() + goodMuons[1].P4()).M();
@@ -510,7 +514,7 @@ int main (int argc, char * argv[])
 			}
 		}
 	}
-/*
+
 	// make the directories for the plots
 	mkdir("cut_plots", 0777);
 	mkdir("cut_plots/electron_resolved_channel", 0777);
@@ -628,7 +632,7 @@ int main (int argc, char * argv[])
 	// deltar
 	h_mer_muon_deltar->Draw();
 	c1->SaveAs("cut_plots/muon_merged_channel/mer_muon_deltar.eps");
-*/
+
 	// output event efficiency information
 	int ll_events = ee_events + mumu_events;
 	int mll_events = mee_events + mmumu_events;
@@ -644,7 +648,7 @@ int main (int argc, char * argv[])
 	int mllmB_events = meemB_events + mmumumB_events;
 
 	cout << total_events << "\t";
-/*
+
 	cout << ee_events << "\t";
 	cout << mee_events << "\t";
 	cout << eejj_events << "\t";
@@ -657,6 +661,7 @@ int main (int argc, char * argv[])
 	cout << eeB_events << "\t";
 	cout << meeB_events << "\t";
 	cout << meemB_events << "\t";
+
 	cout << mumu_events << "\t";
 	cout << mmumu_events << "\t";
 	cout << mumujj_events << "\t";
@@ -669,7 +674,7 @@ int main (int argc, char * argv[])
 	cout << mumuB_events << "\t";
 	cout << mmumuB_events << "\t";
 	cout << mmumumB_events << "\t";
-*/
+
 	cout << ll_events << "\t";
 	cout << mll_events << "\t";
 	cout << lljj_events << "\t";
