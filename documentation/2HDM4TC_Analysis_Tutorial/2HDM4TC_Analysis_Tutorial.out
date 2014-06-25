@@ -1,9 +1,9 @@
-\BOOKMARK [1][-]{section.1}{Level 1: Generating Simulated Events with MadGraph, Pythia, Delphes, and 2HDMTC}{}
+\BOOKMARK [1][-]{section.1}{Level 1: Generating Simulated Events with MadGraph, Pythia, Delphes, and 2HDM4TC}{}
 \BOOKMARK [2][-]{subsection.1.1}{Installing ROOT}{section.1}
 \BOOKMARK [2][-]{subsection.1.2}{Installing MadGraph}{section.1}
 \BOOKMARK [2][-]{subsection.1.3}{Installing Pythia}{section.1}
 \BOOKMARK [2][-]{subsection.1.4}{Installing Delphes}{section.1}
-\BOOKMARK [2][-]{subsection.1.5}{Installing 2HDMTC Model}{section.1}
+\BOOKMARK [2][-]{subsection.1.5}{Installing 2HDM4TC Model}{section.1}
 \BOOKMARK [2][-]{subsection.1.6}{MadGraph Explanation}{section.1}
 \BOOKMARK [2][-]{subsection.1.7}{Pythia Explanation}{section.1}
 \BOOKMARK [2][-]{subsection.1.8}{Delphes Explanation}{section.1}

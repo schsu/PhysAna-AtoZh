@@ -1,8 +1,8 @@
-This is pdfTeXk, Version 3.141592-1.40.3 (Web2C 7.5.6) (format=latex 2014.4.8)  24 JUN 2014 18:42
+This is pdfTeXk, Version 3.141592-1.40.3 (Web2C 7.5.6) (format=latex 2014.4.8)  25 JUN 2014 16:21
 entering extended mode
  %&-line parsing enabled.
-**2HDMTC_Analysis_Tutorial.tex
-(./2HDMTC_Analysis_Tutorial.tex
+**2HDM4TC_Analysis_Tutorial.tex
+(./2HDM4TC_Analysis_Tutorial.tex
 LaTeX2e <2005/12/01>
 Babel <v3.8h> and hyphenation patterns for english, usenglishmax, dumylang, noh
 yphenation, arabic, basque, bulgarian, coptic, welsh, czech, slovak, german, ng
@@ -164,8 +164,8 @@ Package: geometry 2002/07/08 v3.2 Page Geometry
 \Gm@dimlist=\toks27
 
 (/usr/share/texmf/tex/xelatex/xetexconfig/geometry.cfg))
-(./2HDMTC_Analysis_Tutorial.aux)
-\openout1 = `2HDMTC_Analysis_Tutorial.aux'.
+(./2HDM4TC_Analysis_Tutorial.aux)
+\openout1 = `2HDM4TC_Analysis_Tutorial.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 12.
 LaTeX Font Info:    ... okay on input line 12.
@@ -194,9 +194,9 @@ Package: refcount 2006/02/20 v3.0 Data extraction from references (HO)
 LaTeX Info: Redefining \ref on input line 12.
 LaTeX Info: Redefining \pageref on input line 12.
 
-(./2HDMTC_Analysis_Tutorial.out) (./2HDMTC_Analysis_Tutorial.out)
+(./2HDM4TC_Analysis_Tutorial.out) (./2HDM4TC_Analysis_Tutorial.out)
 \@outlinefile=\write3
-\openout3 = `2HDMTC_Analysis_Tutorial.out'.
+\openout3 = `2HDM4TC_Analysis_Tutorial.out'.
 
 -------------------- Geometry parameters
 paper: class default
@@ -239,15 +239,15 @@ driver:
 -----------------------
  [1
 
-] [2]
-[3] (./2HDMTC_Analysis_Tutorial.aux) ) 
+]
+[2] [3] (./2HDM4TC_Analysis_Tutorial.aux) ) 
 Here is how much of TeX's memory you used:
  3116 strings out of 256217
- 42773 string characters out of 1917096
+ 42786 string characters out of 1917096
  109868 words of memory out of 1500000
  6418 multiletter control sequences out of 10000+200000
  5472 words of font info for 21 fonts, out of 1200000 for 2000
  645 hyphenation exceptions out of 8191
- 27i,5n,36p,926b,391s stack positions out of 5000i,500n,6000p,200000b,15000s
+ 27i,5n,36p,928b,391s stack positions out of 5000i,500n,6000p,200000b,15000s
 
-Output written on 2HDMTC_Analysis_Tutorial.dvi (3 pages, 12508 bytes).
+Output written on 2HDM4TC_Analysis_Tutorial.dvi (3 pages, 12528 bytes).
