@@ -1,0 +1,44 @@
+ta+ ta- 1.19088e-05
+mu+ mu- 0
+t~ t 0.12839
+c~ c 4.06181e-06
+b~ b 0.000102161
+s~ s 0
+w- w+ 0.4035
+z z 0.194344
+z h3 0.0856277
+w- h+ 0.0940592
+w+ h- 0.0939618
+g g 6.03464e-14
+z ta+ ta- 0
+z mu+ mu- 0
+z t~ t 0
+z c~ c 0
+z b~ b 0
+z s~ s 0
+z w- w+ 0
+z z z 0
+z z h3 0
+z w- h+ 0
+z w+ h- 0
+z g g 0
+h3 ta+ ta- 0
+h3 mu+ mu- 0
+h3 c~ c 0
+h3 b~ b 0
+h3 s~ s 0
+h3 w- w+ 0
+h3 g g 0
+h- d~ c 0
+h- s~ u 0
+h- s~ c 0
+h- b~ t 1.50616e-15
+h- mu+ vm 0
+h- ta+ vt 0
+h+ u~ s 0
+h+ c~ d 0
+h+ c~ s 0
+h+ t~ b 1.49548e-15
+h+ vm~ mu- 0
+h+ vt~ ta- 0
+# Total width: 43.3813

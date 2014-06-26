@@ -1,0 +1,3 @@
+c      Input values....
+      double precision TanBeta ,SinAlpha ,SinGamma 
+      common /USR_PARAM/  TanBeta ,SinAlpha ,SinGamma 

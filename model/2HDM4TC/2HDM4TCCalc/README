@@ -1,0 +1,23 @@
+######################################################################
+#                                                                    #
+#              How to use the "Strong Dynamics Modeled               #
+#              by a Two Higgs Doublet Model" Calculator              #
+#                                                                    #
+#                       Written by Jared Evans                       #
+#                  University of California, Davis                   #
+#                         jaevans@ucdavis.edu                        #
+#                                                                    #
+######################################################################
+
+   First, compile the calculator, 2HDM4TCCalc, via "make". The script will appear in the bin directory as "2HDM4TCCalc".  In the LHA file TCCalc.txt, the Block "TCPARAMS" contains six parameters to modify. These are the masses of the three neutral Higgs bosons in a two Higgs doublet model and the three mixing angles, alpha, beta and gamma (see related note for more information).  Once those parameters are set, the calculator can be run by typing "./2HDM4TCCalc TCCalc.txt param_card.dat", the new param_card is usable with the 2HDM4TC model. 
+
+The parameters in TCPARAMS are as follows:
+
+1:  MH1 - the light Higgs mass (h0) (default 120)
+2:  MH2 - the heavy Higgs mass (H0) (default 300)
+3:  MH3 - the pseudoscaler Higgs mass (A0) (default 250)
+4:  TanBeta - the ratio v_1/v_2 (default 1)
+5:  SinAlpha - the mixing angle between H1/H2 to form h0 and H0 (default 0.8)
+6:  SinGamma - the angle of top mass arising from H1/H2 (default 0)
+7:  LWARN - if lambda_{1-4} are above this value a warning is displayed (default of 80) 
+8:  TWARN - if lambda_t is above this value a warning is displayed (default of 6) 
