@@ -8,4 +8,8 @@
 \BOOKMARK [2][-]{subsection.1.7}{Pythia Explanation}{section.1}
 \BOOKMARK [2][-]{subsection.1.8}{Delphes Explanation}{section.1}
 \BOOKMARK [2][-]{subsection.1.9}{Modifying Configuration Files}{section.1}
+\BOOKMARK [2][-]{subsection.1.10}{Generating Your Simulation}{section.1}
 \BOOKMARK [1][-]{section.2}{Level 2: Truth Particle Study}{}
+\BOOKMARK [2][-]{subsection.2.1}{truth\137table}{section.2}
+\BOOKMARK [2][-]{subsection.2.2}{truth\137histogram}{section.2}
+\BOOKMARK [1][-]{section.3}{Level 3: Detected Particle Study}{}
