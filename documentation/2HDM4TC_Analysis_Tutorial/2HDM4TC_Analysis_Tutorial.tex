@@ -193,7 +193,70 @@ And copy it into your MadGraph directory. Finally, untar the model:
 
 \subsection{Modifying Configuration Files}
 
+\subsubsection*{Process Card}
+
+The first input for MadGraph to generate events is a process card. This card defines the physical process simulated, such as our AZH process. When using a process which involved BSM particles and parameters, such as our A particle, the process needs to reference a model. This is precisely why we need our 2HDM4TC model to simulate our AZH process.
+
+\bigskip
+
+For now, copy our AZH process card from the following url
+
+\bigskip
+
+\url{https://github.com/schsu/PhysAna-AtoZh/tree/master/Cards/proc-2HDM4TC-gg-h3-zh.dat}
+
+\bigskip
+
+into your MadGraph directory. You should open this process card to see what exactly is going on. In particlular, you will see a series of definitions for particles such as
+
+\begin{verbatim}
+	define lp e+ mu+
+\end{verbatim}
+
+MadGraph knows the definitions of e+ and mu+, but it does not define lp to mean either e+ or mu+. That's what these define statements do. Finally, you'll see our process generated and output at the end of the process card.
+
+\begin{verbatim}
+	generate g g > h3, (h3 > z h1, z > lp lm, h1 > b b~)
+	output madevent proc-2HDM4TC-gg-h3-zh -f
+\end{verbatim}
+
+The output will all be in a folder called "proc-2HDM4TC-gg-h3-zh" - you may, of course, change this to whatever you like.
+
+\subsubsection*{Delphes Card}
+
+The version of MadGraph you have installed is an older version because the 2HDM4TC model does not work with the newer version of MadGraph. As a result, the Delphes card which comes in your 
+
+\begin{verbatim}
+	MadGraph5_v1_5_14/Template/Cards
+\end{verbatim}
+
+directory will not produce the correct output for our study. For now, replace delphes\_card\_default.dat in MadGraph5\_v1\_5\_14/Template/Cards with the Delphes card from the following url
+
+\bigskip
+
+\url{https://github.com/schsu/PhysAna-AtoZh/tree/master/Cards/a-zh/delphes_card_default.dat}
+
+\bigskip
+
 \subsection{Generating Your Simulation}
+
+Now you should be ready to generate your simulation! With all the cards in the right places, cd to your MadGraph directory and run the following command.
+
+\begin{verbatim}
+	./bin/mg5 proc-2HDM4TC-gg-h3-zh.dat
+\end{verbatim}
+
+This should create a process directory calle "proc-2HDM4TC-gg-h3-zh" - cd to this directory and run the following command.
+
+\begin{verbatim}
+	./bin/generate_events
+\end{verbatim}
+
+This should bring up a prompt asking you exactly which steps you would like to carry out in your simulation. There should be an option to use Delphes - the last step in our simulation. Pick this option, and your simulation should be underway!
+
+\bigskip
+
+The Events generated should be output into a ROOT file under "Events/run\_01" in your process directory. If you run the simulation again, the resulting output will be in a ROOT file under "Events/run\_02" - so you can run the simulation as many times as you want, possibly changing the parameter and run cards inbetween simulations to study different simulations.
 
 \section{Level 2: Truth Particle Study}
 
@@ -239,15 +302,18 @@ The program requires the user to provide the path to a ROOT file as commandline 
 
 \bigskip
 
-To skip these interactive steps, you can supply the Event number and the number of particles to analyze with the optional commandline arguments [event] and [numberofParticles]. An example output of truth\_table is displayed in Figure X.
+To skip these interactive steps, you can supply the Event number and the number of particles to analyze with the optional commandline arguments [event] and [numberofParticles]. An example output of truth\_table is displayed in Figure \ref{fig:truthTableOutput}.
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width = \linewidth]{truth_table_screenshot.png}
+	\caption{truth\_table Output}
+	\label{fig:truthTableOutput}
+\end{figure}
 
 \bigskip
 
-\includegraphics[width = \linewidth]{truth_table_screenshot.png}
-
-\bigskip
-
-Before analyzing Figure X, it is worth taking a look at the code for truth\_table in the main.cpp file in the truth\_table directory. With a basic understanding of ROOT and C++, this code should be straight forward. However, you may want to play around with which branches to read data from. For example, the code can be easily modified to read the Electron branch of our ROOT files instead of the Particle branch, and to output a table of information about the Electron objects in the Electron branch. To do this, for example, you could simply change the line
+Before analyzing Figure \ref{fig:truthTableOutput}, it is worth taking a look at the code for truth\_table in the main.cpp file in the truth\_table directory. With a basic understanding of ROOT and C++, this code should be straight forward. However, you may want to play around with which branches to read data from. For example, the code can be easily modified to read the Electron branch of our ROOT files instead of the Particle branch, and to output a table of information about the Electron objects in the Electron branch. To do this, for example, you could simply change the line
 
 \begin{verbatim}
 	TClonesArray * branchParticle = tr->UseBranch("Particle");
@@ -276,7 +342,7 @@ Doing these small programming exercises will help to familiarize yourself with t
 
 \bigskip
 
-Now, let's return to Figure X, and analyze each piece of the output truth particle information to understand the structure of a truth particle and of our Event.
+Now, let's return to Figure \ref{fig:truthTableOutput}, and analyze each piece of the output truth particle information to understand the structure of a truth particle and of our Event.
 
 \bigskip
 
@@ -300,7 +366,7 @@ The Status of a particle can be either 3, 2, or 1. Status 3 refers to truth part
 
 \bigskip
 
-M1, M2, D1, and D2 refer to the indices of the mother and daughter particles of a particle. For example, we can see in Figure X that the index of the mother particle of particle \#12 (a muon) is particle \#8 (a Z boson). Using these variables, you can scan through a table to see the decay chains of all truth particles. You can do this either by eye, or by writing a program.
+M1, M2, D1, and D2 refer to the indices of the mother and daughter particles of a particle. For example, we can see in Figure \ref{fig:truthTableOutput} that the index of the mother particle of particle \#12 (a muon) is particle \#8 (a Z boson). Using these variables, you can scan through a table to see the decay chains of all truth particles. You can do this either by eye, or by writing a program.
 
 \subsubsection*{Exercises}
 
@@ -338,23 +404,29 @@ The program should output the following usage statement.
 	usage: ./truth_histogram inputFile
 \end{verbatim}
 
-The program requires the user to provide the path to a ROOT file as commandline input. The program is not interactive - it just outputs the file "truth\_electron\_pt.eps" in present working directory. The output EPS file should look something like Figure Y.
+The program requires the user to provide the path to a ROOT file as commandline input. The program is not interactive - it just outputs the file "truth\_electron\_pt.eps" in present working directory. The output EPS file should look something like Figure \ref{fig:truthElectron1PT}.
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width = \linewidth]{truth_electron_1_pt.eps}
+	\caption{Here we see the PT distribution for Status 1 electrons. Notice how there are many electrons with low PT. This is because most final state electrons are actually produced in our parton shower simulation.}
+	\label{fig:truthElectron1PT}
+\end{figure}
 
 \bigskip
 
-\includegraphics[width = \linewidth]{truth_electron_1_pt.eps}
+Now we are ready to make some real physics analysis plots! The source code for truth\_histogram is very short, so it should be very easy to modify to output truth particle histograms of whatever you may be interested in - Status 1 electron PT, Status 3 muon energy, Status 3 Z boson Eta, you name it. For now, let's discuss the plot in Figure \ref{fig:truthElectron1PT}, and some real physics for a moment.
 
 \bigskip
 
-Now we are ready to make some real physics analysis plots! The source code for truth\_histogram is very short, so it should be very easy to modify to output truth particle histograms of whatever you may be interested in - Status 1 electron PT, Status 3 muon energy, Status 3 Z boson Eta, you name it. For now, let's discuss the plot in Figure Y, and some real physics for a moment.
+We see in Figure \ref{fig:truthElectron1PT} that the vast majority of Status 1 electrons have very low PT. However, the AZH process we are trying to analyze should produce 2 electrons (or muons) which decay from a Z boson. The Z boson has a mass of around 90 GeV, while an electrons only has a mass of 0.05 GeV, so the vast majority of the Z boson's mass should go into the electrons momentum. Thus, we should expect our electrons to have high PT. Why, then, do most of our Status 1 electrons have low PT? To answer that, let's first plot the PT distribution of Status 3 electrons. We know that Status 3 electrons are the electrons which decayed from our Z boson, whereas Status 1 electrons may have been produced by our parton shower. This plot is displayed in Figure \ref{fig:truthElectron3PT}.
 
-\bigskip
-
-We see in Figure Y that the vast majority of Status 1 electrons have very low PT. However, the AZH process we are trying to analyze should produce 2 electrons (or muons) which decay from a Z boson. The Z boson has a mass of around 90 GeV, while an electrons only has a mass of 0.05 GeV, so the vast majority of the Z boson's mass should go into the electrons momentum. Thus, we should expect our electrons to have high PT. Why, then, do most of our Status 1 electrons have low PT? To answer that, let's first plot the PT distribution of Status 3 electrons. We know that Status 3 electrons are the electrons which decayed from our Z boson, whereas Status 1 electrons may have been produced by our parton shower. This plot is displayed in Figure Z.
-
-\bigskip
-
-\includegraphics[width = \linewidth]{truth_electron_3_pt.eps}
+\begin{figure}[h]
+	\centering
+	\includegraphics[width = \linewidth]{truth_electron_3_pt.eps}
+	\caption{Here we see the PT distribution for Status 3 electrons. Notice how there are many electrons with high PT. This is because Status 3 electrons in our simulation are decay products of our Z boson.}
+	\label{fig:truthElectron3PT}
+\end{figure}
 
 \bigskip
 
