@@ -3,6 +3,7 @@
 \usepackage{amsmath}
 \usepackage{hyperref}
 \usepackage{breakurl}
+\usepackage{epstopdf}
 
 \setbeamertemplate{footline}[frame number]
 
@@ -215,7 +216,7 @@ This program outputs a table of information on truth particles. An example outpu
 	\begin{frame}{truth\_table Output}
 		\begin{figure}
 			\centering
-			\includegraphics[width = \linewidth]{truth_table_output.eps}
+			\includegraphics[width = \linewidth]{truth_table_output.png}
 		\end{figure}
 	\end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -242,9 +243,9 @@ Let's discuss some of the output information.
 	\begin{frame}{Truth Particle Details, Status}
 
 		\begin{itemize}
-\item<1->Status 1: This refers to particles after the MadGraph simulation, but before Pythia simulates parton showers.
+\item<1->Status 3: This refers to particles after the MadGraph simulation, but before Pythia simulates parton showers.
 \item<1->Status 2: This refers to intermediate particles between Status 1 and Status 3.
-\item<1->Status 3: This refers to final state particles, after Pythia simulates parton showers.
+\item<1->Status 1: This refers to final state particles, after Pythia simulates parton showers.
 		\end{itemize}
 
 \bigskip
