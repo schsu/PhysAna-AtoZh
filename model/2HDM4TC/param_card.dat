@@ -38,10 +38,10 @@ Block MASS # Mass spectrum (kinematic masses)
 # 2HDM ADD SCALARS
         25    1.2500000000000E+02    # h mass
         35    1.0000000000000E+03    # H mass
-        36    10.0000000000000E+02    # A mass
+        36    2.50000000000000E+02    # A mass
         37    3.0000000000000E+02    # Charged Higgs
 #     PDG               Width
-DECAY        25   4.33813095e+01   # h1 decays
+DECAY        25   4.33813095e-04   # h1 decays
 #          BR         NDA      ID1       ID2
      1.19088294e-05    2         -15        15   # BR(h1 -> ta+ ta- )
      0.00000000e+00    2         -13        13   # BR(h1 -> mu+ mu- )
@@ -58,7 +58,7 @@ DECAY        25   4.33813095e+01   # h1 decays
      1.50615650e-15    3          37        -5         6   # BR(h1 -> h- b~ t )
      1.49547867e-15    3         -37        -6         5   # BR(h1 -> h+ t~ b )
 #
-DECAY        36   2.40022475e-06   # h3 decays
+DECAY        36   1.0   # h3 decays
 #          BR         NDA      ID1       ID2
      0.00000000e+00    2         -15        15   # BR(h3 -> ta+ ta- )
      0.00000000e+00    2         -13        13   # BR(h3 -> mu+ mu- )
@@ -101,3 +101,4 @@ BLOCK MGUSER
          1     1.0000000000000e+00   # TanBeta ,v2/v1
          2     0.0000000000000e+00   # SinAlpha ,Sine of the h1/h2 mixing angle
          3     7.0710000000000e-01   # SinGamma ,Sine of the h1/h2 top angle
+
