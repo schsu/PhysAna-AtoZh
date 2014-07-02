@@ -333,6 +333,20 @@ find its parameter card in your MadGraph directory under Templates/Cards/param\_
 These cards will be copied into your PZB process directory when we use MadGraph to simulate our PZB process. Take a look at this card
 and make sure that the parameters shared between this card and the parameter card for our AZH process are the same. For example,
 make sure that both cards are using 125 GeV for the mass of the SM Higgs.
+Feel free to compare the parameter card for your background with the one I've been using for my simulations, located in the git repository at the following url.
+
+\bigskip
+
+\url{https://github.com/schsu/PhysAna-AtoZh/tree/master/Cards/pp-zbb/param_card.dat}
+
+\bigskip
+
+(Since the parameter card for your AZH process comes from the 2HDM4TC directory, it should already be identical to the one in the git repository.
+It is located at the following url anywho.)
+
+\bigskip
+
+\url{https://github.com/schsu/PhysAna-AtoZh/tree/master/model/2HDM4TC/param_card.dat}
 
 \subsubsection{Run Card}
 \label{sec:runCard}
@@ -341,7 +355,7 @@ With the physical parameters of our process defined in the parameter card, and d
 parameters related to the data run we will be simulated are defined in the run card. While the term "run" when referring to data collection
 is not consistently defined in physics, it typically refers to either a very short period of time in which data is continuosly collected (when bunches
 of particles of particles enter a detector at an accelerator, for example) or the longer period of time in which a particular experiment collects data
-(such as ATLAS' "run 2").
+(such as the LHC "Run 2").
 
 \bigskip
 
@@ -360,6 +374,11 @@ on the other hard, our uncertainty would be only 1 percent).
 \bigskip
 
 You may also want to change your beam energy to reflect either past runs at the LHC (4000 GeV per beam), or future runs at the LHC (7000 GeV per beam), for example.
+Feel free to compare your run card with the one I've been using for my simulations, located in the git repository at the following url.
+
+\bigskip
+
+\url{https://github.com/schsu/PhysAna-AtoZh/tree/master/Cards/run_card.dat}
 
 \bigskip
 
@@ -404,7 +423,7 @@ For now, replace delphes\_card\_default.dat in MadGraph5\_v1\_5\_14/Template/Car
 
 \bigskip
 
-\url{https://github.com/schsu/PhysAna-AtoZh/tree/master/Cards/a-zh/delphes_card_default.dat}
+\url{https://github.com/schsu/PhysAna-AtoZh/tree/master/Cards/delphes_card_default.dat}
 
 \bigskip
 
