@@ -404,6 +404,7 @@ PT in the range 100 GeV to 200 GeV, etc, all the way up to the mass of A used in
 sacrificing the good statistics gained by generating so many Events.
 
 \subsubsection{Delphes Card}
+\label{sec:delphesCard}
 
 The version of MadGraph you have installed is an older version because the 2HDM4TC model does
 not work with the newer version of MadGraph. As a result, the Delphes card which comes in your
@@ -552,7 +553,7 @@ To skip these interactive steps, you can supply the Event number and the number 
 particles to analyze with the optional commandline arguments [event] and [numberofParticles].
 An example output of truth\_table is displayed in Figure \ref{fig:truthTableOutput}.
 
-\begin{figure}[h]
+\begin{figure}[!htbp]
 	\centering
 	\includegraphics[width = \linewidth]{truth_table_screenshot.png}
 	\caption{truth\_table Output}
@@ -689,7 +690,7 @@ The program requires the user to provide the path to a ROOT file as commandline 
 The program is not interactive - it just outputs the file "truth\_electron\_pt.eps" in
 present working directory. The output EPS file should look something like Figure \ref{fig:truthElectron1PT}.
 
-\begin{figure}[h]
+\begin{figure}[!htbp]
 \begin{minipage}{0.45\textwidth}
 	\centering
 	\includegraphics[width = \linewidth]{truth_electron_1_pt.eps}
@@ -752,5 +753,198 @@ to produce these plots is critical in all following analysis, and you should fee
 practice producing these plots, and thinking up good questions which could be answered by viewing these plots.
 
 \section{Level 3: Detected Particle Study}
+
+With the ability to make and understands kinematic plots of truth particles, it's time to turn
+our attention towards detected particles. As explained before, Delphes simulates our detector's
+response to our truth particles. The particles which are detected in this simulation have some
+momentum and energy smearing, and are output in various branches by Delphes. You can check the
+TreeWriter module in your Delphes card to see which branches are output from Delphes. If you are
+using the Delphes card suggested in Section \ref{sec:delphesCard} to generate your ROOT files, 
+the following branches, amoung others, should be stored in your ROOT files.
+
+\begin{verbatim}
+	Electron
+	Muon
+	Jet4
+	Jet8
+	Jet12
+\end{verbatim}
+
+These are the branches we will be analyzing in Level 3. If your ROOT files do not contain
+these branches, carefully go over Level 1 again - something may not be right with your
+Delphes set up. You can double check quickly that your
+ROOT files do indeed include these branches by opening up a TBrowser from the interactive
+ROOT shell and investigating your ROOT file. Your ROOT file should reveal a tree structure
+similar to that in Figure \ref{fig:tbrowserOutput}.
+
+\begin{figure}[!htbp]
+	\centering
+	\includegraphics[width = \linewidth]{tbrowser_screenshot.png}
+	\caption{TBrowser Output}
+	\label{fig:tbrowserOutput}
+\end{figure}
+
+2 programs have been written to aid in the analysis of these branches - inclusive\_study
+and cut\_study. They can be found in the git repository at the following url.
+
+\bigskip
+
+\url{https://github.com/schsu/PhysAna-AtoZh/tree/master/level3}
+
+\bigskip
+
+inclusive\_study analyzes kinematic properties of the Electron, Muon, and Jet4 branches, without
+applying any cuts. The kinematic plots produced by inclusive\_study motivate cuts. These cuts will
+be explained in detail in the following sections. cut\_study, then, applies several cuts and analyzes
+the kinematic properties of the Electron, Muon, Jet4, and Jet8 branches. It also outputs efficiency
+information for each cut.
+
+\bigskip
+
+These 2 programs can be modified to perform a wide range of analysis. The Exercise Sections for
+each program will suggest some analysis you may want to do after understanding the programs.
+
+\subsection{inclusive\_study}
+
+inclusive\_study takes a ROOT file with Electron, Muon, and Jet4 branches as input, and outputs a series of kinematic
+histograms and detection efficiency information. The detection efficiency information will help us to verify that
+our Delphes simulation is working as expected, and the kinematic histograms will motivate a series of cuts on our Events.
+
+\bigskip
+
+The code for inclusive\_study is located at the following url in the PhysAna-AtoZh git repository.
+
+\bigskip
+
+\url{https://github.com/schsu/PhysAna-AtoZh/tree/master/level3/inclusive_study}
+
+\bigskip
+
+To compile and run it, run
+
+\begin{verbatim}
+	make
+\end{verbatim} 
+
+in the inclusive\_study directory and then run
+
+\begin{verbatim}
+	./inclusive_study
+\end{verbatim}
+
+The program should output the following usage statement.
+
+\begin{verbatim}
+	usage: ./inclusive_study inputFile
+\end{verbatim}
+
+Simply supply the program with the ROOT files that Delphes generated during your simulations.
+The program will create the directory "inclusive\_plots" and output several histograms as EPS files in this directory.
+A full list of the histograms output can be found in the program's README file, located in the inclusive\_study directory.
+We will talk about some of them in a bit. Let us first talk about particle detection efficiency.
+
+\subsection{Particle Detection Efficiency}
+
+The program also outputs to stdout some efficiency information about electrons and muons. Namely, it outputs the total
+number of electrons and muons in the Electron and Muon branches, as well as the total number of electrons and muons in
+the Particle branch. Comparing these numbers reveals the efficiency of detecting electrons and muons, as dictated by
+the Delphes card used when performing the simulation. An example of this output is displayed in Figure \ref{fig:inclusiveOutput}.
+
+\begin{figure}[!htbp]
+	\centering
+	\includegraphics[width = \linewidth]{inclusive_output_screenshot.png}
+	\caption{inclusive\_study Output}
+	\label{fig:inclusiveOutput}
+\end{figure}
+
+\bigskip
+
+The output of Figure \ref{fig:inclusiveOutput} shows an electron detection efficiency of 41 percent and a muon detection efficiency
+of 77 percent. However, these efficiencies don't seem at first to match up with anything defined in our Delphes card. The Delphes
+module in our Delphes card which applies the detection efficiency for electrons is displayed in Figure \ref{fig:effModule}.
+
+\begin{figure}[!htbp]
+	\centering
+	\begin{verbatim}
+	module Efficiency ElectronEfficiency {
+	  set InputArray ElectronEnergySmearing/electrons
+	  set OutputArray electrons
+	
+	  # set EfficiencyFormula {efficiency formula as a function of eta and pt}
+	
+	  # efficiency formula for electrons
+	  set EfficiencyFormula {                                      (pt <= 10.0) * (0.00) + \
+	                                           (abs(eta) <= 1.5) * (pt > 10.0)  * (0.95) + \
+	                         (abs(eta) > 1.5 && abs(eta) <= 2.5) * (pt > 10.0)  * (0.85) + \
+	                         (abs(eta) > 2.5)                                   * (0.00)}
+	}
+	\end{verbatim}
+	\caption{This is the definition of the electron efficiency module in our Delphes card.}
+	\label{fig:effModule}
+\end{figure}
+
+\bigskip
+
+Looking through the Delphes card, you will see a similar module for muon efficiency.
+As mentioned in previous Sections, our particle detection efficiency is indeed a function of pt and eta.
+To verify our detection efficiencies, we could meticulously count all detected particles
+in the pt and eta ranges defined by our Delphes card and compare these numbers to the
+numbers of truth particles in these same ranges. This is left as an Exercise. However, inclusive\_study
+does output an informative plot along these lines. After running the program on a ROOT file, look in
+the inclusive\_plots directory for the plot electron\_eff\_vs\_pt.eps. An example of what this plot should
+look like is displayed in Figure \ref{fig:electronEffvsPT}.
+
+\begin{figure}[!htbp]
+	\centering
+	\includegraphics[width = \linewidth]{electron_eff_vs_pt.eps}
+	\caption{This is the plot electron\_eff\_vs\_pt.eps. It show the detection efficiency of electrons as a function of their pt. It is formed by dividing the detected electron pt histogram by the truth electron pt histogram.}
+	\label{fig:electronEffvsPT}
+\end{figure}
+
+\bigskip
+
+electron\_eff\_vs\_pt.eps is a plot of the detection efficiency of electrons vs their pt. It is formed by dividing
+the detected electron pt histogram by the truth electron pt histogram. If we look at electrons with large
+pt, we see that the detection efficiency reaches something like 95 percent, consistent with our Delphes
+card. To truly do a proper comparison, eta must be taken into account as well, but these types of plots
+are both informative, and a good example of how to use ROOT to make meaningful histograms by dividing
+other histograms. If you are not familiar with how to do this in ROOT, carefully peruse the code of
+inclusive\_study.
+
+\subsubsection{Kinematic Plots and Cut Motivation}
+
+Now, let us turn our attention towards all those plots produced by inclusive\_study. Since we have already looked at some plots
+of the pt distributions of electrons in Level 2, let's start by looking at the pt distribution of detected electrons to compare.
+inclusive\_study produces this plot and you can find it under the inclusive\_plots directory by the name electron\_pt.eps. My
+detected electron pt plot is displayed in Figure \ref{fig:electronPT}.
+
+\begin{figure}[!htbp]
+	\centering
+	\includegraphics[width = \linewidth]{electron_pt.eps}
+	\caption{This is a plot of the detected electron pt distribution produced by inclusive\_study.} 
+	\label{fig:electronPT}
+\end{figure}
+
+\bigskip
+
+Notice that there appears to be a hard cutoff at roughly 10 GeV. If we refer to our electron efficiency module in Figure \ref{fig:effModule}, this should make sense -
+the detection efficiency for electrons with pt less than 10 GeV is 0. However, we still notice that most electrons have low pt. If we compare this to Figures \ref{fig:truthElectron1PT}
+and \ref{fig:truthElectron3PT}, we can infer that our detector has picked up many electrons which originated in our parton showers. Since the electrons which come
+from our AZH process tend to have high pt, we can perform a cut on Events which do not have at least 2 electrons with a suitably high pt. Making a rough judgement
+based on these plots, we could try setting the pt threshold to 20 GeV to get rid of most of the electrons which were produced by our parton showers. However,
+to quantitatively determine the effectiveness of a cut, we need to perform the same cut on our background process, to verify that much fewer Events pass the cut.
+
+\bigskip
+
+Analyzing our background PZB process with inclusive\_study shows that the electron pt distribution is heavily dominated by low pt electrons. The plot
+of the detected electron pt distribution for the PZB process is displayed in Figure .... Quantifying the effectiveness of the proposed pt cut will
+involve calculating the background and signal yields after the cut is applied - the hope is that the background yield is much smaller than the signal
+yield - this would indicate a discovery with some calculable confidence. This is discussed in detail in the cut\_study Section later on.
+
+\subsubsection*{Exercises}
+
+\subsection{cut\_study}
+
+\subsubsection*{Exercises}
 
 \end{document}

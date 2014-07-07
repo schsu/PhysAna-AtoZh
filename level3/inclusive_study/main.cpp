@@ -67,7 +67,7 @@ int main (int argc, char * argv[])
 	TClonesArray * branchParticle = tr->UseBranch("Particle");
 	TClonesArray * branchElectron = tr->UseBranch("Electron");
 	TClonesArray * branchMuon = tr->UseBranch("Muon");
-	TClonesArray * branchJet = tr->UseBranch("Jet");
+	TClonesArray * branchJet = tr->UseBranch("Jet4");
 
 	// counter for electrons, muons, and jets in particle, electron, muon, and jet branches
 	int64_t electrons = 0;
@@ -234,19 +234,19 @@ int main (int argc, char * argv[])
 	// pt divide plots
 	h_electron_pt->Sumw2();
 	h_truth_electron_pt->Sumw2();
-	TH1F * h_electron_pt_divide = (TH1F*) h_electron_pt->Clone("electron pt divide");
-	h_electron_pt_divide->SetTitle("electron pt divide; pt (GeV, 100 bins); count");
+	TH1F * h_electron_pt_divide = (TH1F*) h_electron_pt->Clone("electron detection efficiency vs pt");
+	h_electron_pt_divide->SetTitle("electron detection efficiency vs pt; pt (GeV, 100 bins); detection efficiency");
 	h_electron_pt_divide->Divide(h_truth_electron_pt);
 	h_electron_pt_divide->Draw();
-	c1->SaveAs("inclusive_plots/electron_pt_divide.eps");
+	c1->SaveAs("inclusive_plots/electron_eff_vs_pt.eps");
 
 	h_muon_pt->Sumw2();
 	h_truth_muon_pt->Sumw2();
-	TH1F * h_muon_pt_divide = (TH1F*) h_muon_pt->Clone("muon pt divide");
-	h_muon_pt_divide->SetTitle("muon pt divide; pt (GeV, 100 bins); count");
+	TH1F * h_muon_pt_divide = (TH1F*) h_muon_pt->Clone("muon detection efficiency vs pt");
+	h_muon_pt_divide->SetTitle("muon detection efficiency vs pt; pt (GeV, 100 bins); detection efficiency");
 	h_muon_pt_divide->Divide(h_truth_muon_pt);
 	h_muon_pt_divide->Draw();
-	c1->SaveAs("inclusive_plots/muon_pt_divide.eps");
+	c1->SaveAs("inclusive_plots/muon_eff_vs_pt.eps");
 
 	// multiplicity plots
 	h_electron_multiplicity->Draw();
