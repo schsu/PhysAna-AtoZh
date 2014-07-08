@@ -515,6 +515,8 @@ int main (int argc, char * argv[])
 		}
 	}
 
+	cout << endl;
+
 	// make the directories for the plots
 	mkdir("cut_plots", 0777);
 	mkdir("cut_plots/electron_resolved_channel", 0777);
@@ -647,8 +649,23 @@ int main (int argc, char * argv[])
 	int mllB_events = meeB_events + mmumuB_events;
 	int mllmB_events = meemB_events + mmumumB_events;
 
-	cout << total_events << "\t";
+	cout << endl;
 
+	cout << "total" << "\t";
+	cout << "ee" << "\t";
+	cout << "mee" << "\t";
+	cout << "eejj" << "\t";
+	cout << "meejj" << "\t";
+	cout << "eebb" << "\t";
+	cout << "meebb" << "\t";
+	cout << "meembb" << "\t";
+	cout << "eeJ" << "\t";
+	cout << "meeJ" << "\t";
+	cout << "eeB" << "\t";
+	cout << "meeB" << "\t";
+	cout << "meemB" << endl;
+
+	cout << total_events << "\t";
 	cout << ee_events << "\t";
 	cout << mee_events << "\t";
 	cout << eejj_events << "\t";
@@ -660,8 +677,25 @@ int main (int argc, char * argv[])
 	cout << meeJ_events << "\t";
 	cout << eeB_events << "\t";
 	cout << meeB_events << "\t";
-	cout << meemB_events << "\t";
+	cout << meemB_events << endl;
 
+	cout << endl;
+
+	cout << "total" << "\t";
+	cout << "mumu" << "\t";
+	cout << "mmumu" << "\t";
+	cout << "mumujj" << "\t";
+	cout << "mmumujj" << "\t";
+	cout << "mumubb" << "\t";
+	cout << "mmumubb" << "\t";
+	cout << "mmumumbb";
+	cout << "mumuJ" << "\t";
+	cout << "mmumuJ" << "\t";
+	cout << "mumuB" << "\t";
+	cout << "mmumuB" << "\t";
+	cout << "mmumumB" << endl;
+
+	cout << total_events << "\t";
 	cout << mumu_events << "\t";
 	cout << mmumu_events << "\t";
 	cout << mumujj_events << "\t";
@@ -673,8 +707,25 @@ int main (int argc, char * argv[])
 	cout << mmumuJ_events << "\t";
 	cout << mumuB_events << "\t";
 	cout << mmumuB_events << "\t";
-	cout << mmumumB_events << "\t";
+	cout << mmumumB_events << endl;
 
+	cout << endl;
+
+	cout << "total" << "\t";
+	cout << "ll" << "\t";
+	cout << "mll" << "\t";
+	cout << "lljj" << "\t";
+	cout << "mlljj" << "\t";
+	cout << "llbb" << "\t";
+	cout << "mllbb" << "\t";
+	cout << "mllmbb" << "\t";
+	cout << "llJ" << "\t";
+	cout << "mllJ" << "\t";
+	cout << "llB" << "\t";
+	cout << "mllB" << "\t";
+	cout << "mllmB" << endl;
+
+	cout << total_events << "\t";
 	cout << ll_events << "\t";
 	cout << mll_events << "\t";
 	cout << lljj_events << "\t";
@@ -686,7 +737,8 @@ int main (int argc, char * argv[])
 	cout << mllJ_events << "\t";
 	cout << llB_events << "\t";
 	cout << mllB_events << "\t";
-	cout << mllmB_events << "\t";
+	cout << mllmB_events << endl;
+
 	cout << endl;
 
 	return 0;
